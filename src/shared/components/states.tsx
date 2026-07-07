@@ -30,10 +30,14 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 rounded-lg border border-dashed p-10 text-center">
-      <div className="text-muted-foreground">{icon ?? <IconInbox className="size-8" />}</div>
+      <div className="text-muted-foreground">
+        {icon ?? <IconInbox className="size-8" />}
+      </div>
       <div>
         <p className="font-medium">{title}</p>
-        {description ? <p className="text-muted-foreground text-sm">{description}</p> : null}
+        {description ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : null}
       </div>
       {action}
     </div>

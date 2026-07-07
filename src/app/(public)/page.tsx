@@ -6,7 +6,13 @@ import { getBlogPosts, getClasses } from "@/modules/public/api"
 import { formatDate, styleLabel } from "@/modules/public/format"
 import { Button } from "@/shadcn/button"
 import { Badge } from "@/shadcn/badge"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shadcn/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/shadcn/card"
 
 export const metadata: Metadata = {
   title: "Academia de Karate y Kobudo",
@@ -40,9 +46,9 @@ export default async function LandingPage() {
             <h1 className="font-heading text-4xl leading-tight font-bold text-balance md:text-5xl">
               Disciplina, respeto y superación en cada entrenamiento
             </h1>
-            <p className="text-background/70 mt-4 max-w-md text-lg">
-              Academia Gekidokan: Karate Shotokan y Kobudo de Okinawa para niños,
-              jóvenes y adultos. Encuentra tu camino en el dojo.
+            <p className="mt-4 max-w-md text-lg text-background/70">
+              Academia Gekidokan: Karate Shotokan y Kobudo de Okinawa para
+              niños, jóvenes y adultos. Encuentra tu camino en el dojo.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
@@ -70,27 +76,29 @@ export default async function LandingPage() {
 
       {/* Estilos */}
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="font-heading text-2xl font-semibold">Nuestras disciplinas</h2>
+        <h2 className="font-heading text-2xl font-semibold">
+          Nuestras disciplinas
+        </h2>
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <IconKarate className="text-primary size-5" /> Karate Shotokan
+                <IconKarate className="size-5 text-primary" /> Karate Shotokan
               </CardTitle>
               <CardDescription>
-                Kihon, kata y kumite. El estilo de Karate más practicado del mundo,
-                con énfasis en técnica, potencia y disciplina.
+                Kihon, kata y kumite. El estilo de Karate más practicado del
+                mundo, con énfasis en técnica, potencia y disciplina.
               </CardDescription>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <IconKarate className="text-primary size-5" /> Kobudo de Okinawa
+                <IconKarate className="size-5 text-primary" /> Kobudo de Okinawa
               </CardTitle>
               <CardDescription>
-                Manejo tradicional de armas de Okinawa (bo, sai, tonfa), complemento
-                histórico del Karate.
+                Manejo tradicional de armas de Okinawa (bo, sai, tonfa),
+                complemento histórico del Karate.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -98,19 +106,25 @@ export default async function LandingPage() {
       </section>
 
       {/* Clases (teaser) */}
-      <section className="bg-card/40 border-y">
+      <section className="border-y bg-card/40">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="font-heading text-2xl font-semibold">Horarios de clases</h2>
+            <h2 className="font-heading text-2xl font-semibold">
+              Horarios de clases
+            </h2>
             <Button asChild variant="link" size="sm">
-              <Link href="/clases">Ver todos <IconArrowRight /></Link>
+              <Link href="/clases">
+                Ver todos <IconArrowRight />
+              </Link>
             </Button>
           </div>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {classes.slice(0, 3).map((c) => (
               <Card key={c.id} size="sm">
                 <CardHeader>
-                  <Badge variant="secondary" className="w-fit">{styleLabel(c.style)}</Badge>
+                  <Badge variant="secondary" className="w-fit">
+                    {styleLabel(c.style)}
+                  </Badge>
                   <CardTitle className="mt-1">{c.name}</CardTitle>
                   <CardDescription>{c.instructor}</CardDescription>
                 </CardHeader>
@@ -125,7 +139,9 @@ export default async function LandingPage() {
         <div className="flex items-end justify-between gap-4">
           <h2 className="font-heading text-2xl font-semibold">Del blog</h2>
           <Button asChild variant="link" size="sm">
-            <Link href="/blog">Ver todo <IconArrowRight /></Link>
+            <Link href="/blog">
+              Ver todo <IconArrowRight />
+            </Link>
           </Button>
         </div>
         <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -133,12 +149,18 @@ export default async function LandingPage() {
             <Link key={post.slug} href={`/blog/${post.slug}`}>
               <Card className="h-full transition-shadow hover:shadow-lg">
                 <CardHeader>
-                  <Badge variant="secondary" className="w-fit">{post.category}</Badge>
+                  <Badge variant="secondary" className="w-fit">
+                    {post.category}
+                  </Badge>
                   <CardTitle className="mt-1">{post.title}</CardTitle>
-                  <CardDescription>{formatDate(post.publishedAt)}</CardDescription>
+                  <CardDescription>
+                    {formatDate(post.publishedAt)}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground text-sm">{post.excerpt}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {post.excerpt}
+                  </p>
                 </CardContent>
               </Card>
             </Link>
@@ -149,7 +171,9 @@ export default async function LandingPage() {
       {/* CTA contacto */}
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-16 text-center">
-          <h2 className="font-heading text-3xl font-bold">¿Listo para empezar?</h2>
+          <h2 className="font-heading text-3xl font-bold">
+            ¿Listo para empezar?
+          </h2>
           <p className="max-w-md opacity-90">
             Escríbenos y te contamos cómo dar tus primeros pasos en Gekidokan.
           </p>

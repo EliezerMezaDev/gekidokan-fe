@@ -27,9 +27,13 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="bg-background/80 sticky top-0 z-30 border-b backdrop-blur">
+    <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4">
-        <Link href="/" className="flex items-center gap-2" aria-label="Gekidokan — inicio">
+        <Link
+          href="/"
+          className="flex items-center gap-2"
+          aria-label="Gekidokan — inicio"
+        >
           <Image
             src="/images/brand/logotipo.png"
             alt="Gekidokan"
@@ -49,7 +53,7 @@ export function SiteHeader() {
                 "rounded-3xl px-3 py-2 text-sm font-medium transition-colors",
                 isActive(pathname, item.href)
                   ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {item.label}
@@ -78,7 +82,7 @@ export function SiteHeader() {
                     "rounded-3xl px-3 py-2 text-sm font-medium transition-colors",
                     isActive(pathname, item.href)
                       ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground",
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {item.label}

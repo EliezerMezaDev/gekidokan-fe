@@ -2,7 +2,13 @@ import type { Metadata } from "next"
 import { getClasses } from "@/modules/public/api"
 import { styleLabel, weekdayLabel } from "@/modules/public/format"
 import { Badge } from "@/shadcn/badge"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shadcn/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/shadcn/card"
 import { EmptyState } from "@/shared/components/states"
 
 // Datos futuros del backend: revalidación incremental sin rebuild.
@@ -21,7 +27,7 @@ export default async function ClassesPage() {
     <div className="mx-auto max-w-6xl px-4 py-12">
       <header className="mb-8">
         <h1 className="font-heading text-3xl font-bold">Clases y horarios</h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="mt-2 text-muted-foreground">
           Encuentra la clase que se ajusta a tu nivel y disponibilidad.
         </p>
       </header>
@@ -36,16 +42,23 @@ export default async function ClassesPage() {
           {classes.map((c) => (
             <Card key={c.id}>
               <CardHeader>
-                <Badge variant="secondary" className="w-fit">{styleLabel(c.style)}</Badge>
+                <Badge variant="secondary" className="w-fit">
+                  {styleLabel(c.style)}
+                </Badge>
                 <CardTitle className="mt-1">{c.name}</CardTitle>
                 <CardDescription>{c.instructor}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-3">
-                <p className="text-muted-foreground text-sm">{c.description}</p>
+                <p className="text-sm text-muted-foreground">{c.description}</p>
                 <ul className="flex flex-col gap-1 text-sm">
                   {c.schedules.map((s, i) => (
-                    <li key={i} className="flex justify-between border-t py-1.5 first:border-t-0">
-                      <span className="font-medium">{weekdayLabel(s.weekday)}</span>
+                    <li
+                      key={i}
+                      className="flex justify-between border-t py-1.5 first:border-t-0"
+                    >
+                      <span className="font-medium">
+                        {weekdayLabel(s.weekday)}
+                      </span>
                       <span className="text-muted-foreground tabular-nums">
                         {s.startTime} – {s.endTime}
                       </span>

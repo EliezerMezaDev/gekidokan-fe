@@ -1,4 +1,9 @@
-import { getAccessToken, getRefreshToken, setTokens, clearTokens } from "./tokens"
+import {
+  getAccessToken,
+  getRefreshToken,
+  setTokens,
+  clearTokens,
+} from "./tokens"
 
 // Cliente HTTP único. Adjunta Authorization: Bearer, reintenta una vez tras
 // refrescar el token en un 401, y traduce los errores del API a un mensaje no
@@ -10,7 +15,7 @@ export class ApiError extends Error {
   constructor(
     public readonly status: number,
     message: string,
-    public readonly data?: unknown,
+    public readonly data?: unknown
   ) {
     super(message)
     this.name = "ApiError"
@@ -23,7 +28,8 @@ function translateError(status: number, data: unknown): string {
   if (status === 401) return "Tu sesión expiró. Vuelve a iniciar sesión."
   if (status === 403) return "No tienes permiso para realizar esta acción."
   if (status === 404) return "No encontramos lo que buscas."
-  if (status >= 500) return "Ocurrió un problema. Intenta de nuevo en un momento."
+  if (status >= 500)
+    return "Ocurrió un problema. Intenta de nuevo en un momento."
   return "No pudimos completar la operación."
 }
 
@@ -40,7 +46,10 @@ async function refreshToken(): Promise<boolean> {
       clearTokens()
       return false
     }
-    const data = (await res.json()) as { accessToken: string; refreshToken?: string }
+    const data = (await res.json()) as {
+      accessToken: string
+      refreshToken?: string
+    }
     setTokens(data.accessToken, data.refreshToken ?? rt)
     return true
   } catch {
@@ -49,7 +58,11 @@ async function refreshToken(): Promise<boolean> {
   }
 }
 
-async function request<T>(path: string, options: RequestInit = {}, retry = true): Promise<T> {
+async function request<T>(
+  path: string,
+  options: RequestInit = {},
+  retry = true
+): Promise<T> {
   const token = getAccessToken()
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
@@ -76,10 +89,19 @@ async function request<T>(path: string, options: RequestInit = {}, retry = true)
 export const api = {
   get: <T>(path: string) => request<T>(path),
   post: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: "POST", body: body === undefined ? undefined : JSON.stringify(body) }),
+    request<T>(path, {
+      method: "POST",
+      body: body === undefined ? undefined : JSON.stringify(body),
+    }),
   patch: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: "PATCH", body: body === undefined ? undefined : JSON.stringify(body) }),
+    request<T>(path, {
+      method: "PATCH",
+      body: body === undefined ? undefined : JSON.stringify(body),
+    }),
   put: <T>(path: string, body?: unknown) =>
-    request<T>(path, { method: "PUT", body: body === undefined ? undefined : JSON.stringify(body) }),
+    request<T>(path, {
+      method: "PUT",
+      body: body === undefined ? undefined : JSON.stringify(body),
+    }),
   del: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 }

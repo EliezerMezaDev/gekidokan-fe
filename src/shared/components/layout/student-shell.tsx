@@ -17,16 +17,18 @@ export function StudentShell({ children }: { children: ReactNode }) {
     <div className="mx-auto flex min-h-svh w-full max-w-md flex-col">
       <AppHeader title={<span className="text-primary">Gekidokan</span>} />
       <main className="flex-1 p-4 pb-24">{children}</main>
-      <nav className="bg-background/90 fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-md items-center justify-around border-t backdrop-blur">
+      <nav className="fixed inset-x-0 bottom-0 z-30 mx-auto flex max-w-md items-center justify-around border-t bg-background/90 backdrop-blur">
         {studentNav.map((item) => {
-          const active = pathname === item.href || (item.href !== "/s" && pathname.startsWith(item.href))
+          const active =
+            pathname === item.href ||
+            (item.href !== "/s" && pathname.startsWith(item.href))
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
                 "flex flex-1 flex-col items-center gap-1 py-2 text-xs",
-                active ? "text-primary" : "text-muted-foreground",
+                active ? "text-primary" : "text-muted-foreground"
               )}
             >
               <item.icon className="size-5" />

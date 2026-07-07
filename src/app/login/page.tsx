@@ -12,7 +12,13 @@ import { ApiError } from "@/shared/lib/api"
 import { Button } from "@/shadcn/button"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shadcn/card"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/shadcn/card"
 import { Alert, AlertDescription } from "@/shadcn/alert"
 
 function safeNext(next: string | null): string | null {
@@ -40,7 +46,10 @@ function LoginForm() {
       toast.success(`Bienvenido, ${user.name}`)
       router.replace(next ?? homeForRole(user.role))
     } catch (err) {
-      const message = err instanceof ApiError ? err.message : "No pudimos iniciar sesión. Intenta de nuevo."
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : "No pudimos iniciar sesión. Intenta de nuevo."
       setFormError(message)
       toast.error(message)
     }
@@ -49,11 +58,15 @@ function LoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-primary text-2xl">Gekidokan</CardTitle>
+        <CardTitle className="text-2xl text-primary">Gekidokan</CardTitle>
         <CardDescription>Inicia sesión para continuar</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          noValidate
+        >
           {formError ? (
             <Alert variant="destructive">
               <IconAlertTriangle className="size-4" />
@@ -63,14 +76,30 @@ function LoginForm() {
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Correo electrónico</Label>
-            <Input id="email" type="email" autoComplete="email" {...register("email")} />
-            {errors.email ? <p className="text-destructive text-sm">{errors.email.message}</p> : null}
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              {...register("email")}
+            />
+            {errors.email ? (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="password">Contraseña</Label>
-            <Input id="password" type="password" autoComplete="current-password" {...register("password")} />
-            {errors.password ? <p className="text-destructive text-sm">{errors.password.message}</p> : null}
+            <Input
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              {...register("password")}
+            />
+            {errors.password ? (
+              <p className="text-sm text-destructive">
+                {errors.password.message}
+              </p>
+            ) : null}
           </div>
 
           <Button type="submit" disabled={isSubmitting}>

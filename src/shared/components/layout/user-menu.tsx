@@ -32,9 +32,16 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full" aria-label="Cuenta">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          aria-label="Cuenta"
+        >
           <Avatar className="size-8">
-            <AvatarFallback>{user ? initials(user.name) : <IconUser className="size-4" />}</AvatarFallback>
+            <AvatarFallback>
+              {user ? initials(user.name) : <IconUser className="size-4" />}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -42,7 +49,9 @@ export function UserMenu() {
         <DropdownMenuLabel className="flex flex-col">
           <span className="truncate">{user?.name ?? "Invitado"}</span>
           {user?.email ? (
-            <span className="text-muted-foreground truncate text-xs font-normal">{user.email}</span>
+            <span className="truncate text-xs font-normal text-muted-foreground">
+              {user.email}
+            </span>
           ) : null}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

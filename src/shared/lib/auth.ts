@@ -1,6 +1,11 @@
 import { api } from "./api"
 import { setTokens, clearTokens } from "./tokens"
-import { loginResponseSchema, type LoginInput, type Role, type SessionUser } from "@/shared/schemas/auth"
+import {
+  loginResponseSchema,
+  type LoginInput,
+  type Role,
+  type SessionUser,
+} from "@/shared/schemas/auth"
 import { useSession } from "@/shared/store/session"
 
 // Orquesta login/logout: llama al API, guarda tokens y actualiza la sesión.

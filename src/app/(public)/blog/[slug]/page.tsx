@@ -56,11 +56,17 @@ export default async function BlogPostPage({
       </Button>
 
       <Badge variant="secondary">{post.category}</Badge>
-      <h1 className="font-heading mt-3 text-3xl font-bold text-balance">{post.title}</h1>
-      <p className="text-muted-foreground mt-2 text-sm">{formatDate(post.publishedAt)}</p>
+      <h1 className="mt-3 font-heading text-3xl font-bold text-balance">
+        {post.title}
+      </h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        {formatDate(post.publishedAt)}
+      </p>
 
-      <div className="mt-8 flex flex-col gap-4 text-[15px] leading-relaxed [&_a]:text-primary [&_a]:underline [&_h2]:font-heading [&_h2]:mt-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:font-heading [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-6">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.bodyMarkdown}</ReactMarkdown>
+      <div className="mt-8 flex flex-col gap-4 text-[15px] leading-relaxed [&_a]:text-primary [&_a]:underline [&_h2]:mt-4 [&_h2]:font-heading [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:font-heading [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-6">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {post.bodyMarkdown}
+        </ReactMarkdown>
       </div>
     </article>
   )

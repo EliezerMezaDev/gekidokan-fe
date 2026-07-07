@@ -11,7 +11,13 @@ import { Button } from "@/shadcn/button"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
 import { Textarea } from "@/shadcn/textarea"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shadcn/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/shadcn/card"
 
 // Metadata no se exporta desde un client component; el <title> lo cubre el
 // layout raíz. El foco de esta página es el formulario (US-12).
@@ -33,7 +39,9 @@ export default function ContactPage() {
       setSent(true)
       toast.success("Mensaje enviado. Te responderemos pronto.")
     } catch {
-      toast.error("No pudimos enviar tu mensaje. Intenta de nuevo en un momento.")
+      toast.error(
+        "No pudimos enviar tu mensaje. Intenta de nuevo en un momento."
+      )
     }
   }
 
@@ -41,7 +49,7 @@ export default function ContactPage() {
     <div className="mx-auto max-w-lg px-4 py-12">
       <header className="mb-8">
         <h1 className="font-heading text-3xl font-bold">Contacto</h1>
-        <p className="text-muted-foreground mt-2">
+        <p className="mt-2 text-muted-foreground">
           ¿Quieres empezar o tienes dudas? Escríbenos y te contactamos.
         </p>
       </header>
@@ -49,7 +57,7 @@ export default function ContactPage() {
       {sent ? (
         <Card>
           <CardHeader>
-            <CardTitle className="text-primary flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-primary">
               <IconCircleCheck className="size-5" /> ¡Mensaje enviado!
             </CardTitle>
             <CardDescription>
@@ -63,23 +71,40 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+          noValidate
+        >
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">Nombre</Label>
             <Input id="name" autoComplete="name" {...register("name")} />
-            {errors.name ? <p className="text-destructive text-sm">{errors.name.message}</p> : null}
+            {errors.name ? (
+              <p className="text-sm text-destructive">{errors.name.message}</p>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="email">Correo electrónico</Label>
-            <Input id="email" type="email" autoComplete="email" {...register("email")} />
-            {errors.email ? <p className="text-destructive text-sm">{errors.email.message}</p> : null}
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              {...register("email")}
+            />
+            {errors.email ? (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
+            ) : null}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="message">Mensaje</Label>
             <Textarea id="message" rows={5} {...register("message")} />
-            {errors.message ? <p className="text-destructive text-sm">{errors.message.message}</p> : null}
+            {errors.message ? (
+              <p className="text-sm text-destructive">
+                {errors.message.message}
+              </p>
+            ) : null}
           </div>
 
           <Button type="submit" disabled={isSubmitting}>

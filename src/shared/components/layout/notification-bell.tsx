@@ -22,7 +22,12 @@ export function NotificationBell() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" aria-label="Notificaciones">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+          aria-label="Notificaciones"
+        >
           <IconBell className="size-5" />
           {unread > 0 ? (
             <Badge className="absolute -top-1 -right-1 h-4 min-w-4 justify-center rounded-full px-1 text-[10px]">
