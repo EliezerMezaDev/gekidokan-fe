@@ -14,6 +14,19 @@ export function formatDate(iso: string): string {
   return dateFormatter.format(new Date(iso))
 }
 
+// Fecha corta del diseño: "28 Feb, 2026". Determinista (UTC) y con abreviatura
+// capitalizada, que Intl no da en español.
+const shortMonths = [
+  "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+]
+
+export function formatShortDate(iso: string): string {
+  const d = new Date(iso)
+  const day = String(d.getUTCDate()).padStart(2, "0")
+  return `${day} ${shortMonths[d.getUTCMonth()]}, ${d.getUTCFullYear()}`
+}
+
 const weekdayLabels: Record<Weekday, string> = {
   LUNES: "Lunes",
   MARTES: "Martes",

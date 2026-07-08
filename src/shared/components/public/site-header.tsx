@@ -1,15 +1,14 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { IconMenu2 } from "@tabler/icons-react"
 import { cn } from "@/shared/lib/utils"
-import { Button } from "@/shadcn/button"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/shadcn/sheet"
 
-// Header del portal público. Nav desktop + menú móvil (Sheet). CTA a /login.
+// Header del portal público. Fiel al diseño: wordmark BUSHIDŌ, nav con el enlace
+// activo en rojo y CTA "Inscríbete". Menú móvil con Sheet.
 
 const publicNav = [
   { href: "/", label: "Inicio" },
@@ -22,81 +21,85 @@ function isActive(pathname: string, href: string): boolean {
   return href === "/" ? pathname === "/" : pathname.startsWith(href)
 }
 
+function Wordmark() {
+  return (
+    <Link
+      href="/"
+      className="disp flex items-center gap-2 text-[22px] font-bold text-[#1c1717]"
+      aria-label="Bushidō — inicio"
+    >
+      <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-md bg-[#eb1c24] text-[15px] text-white">
+        武
+      </span>
+      BUSHIDŌ
+    </Link>
+  )
+}
+
 export function SiteHeader() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4">
+    <header className="mx-auto flex w-full max-w-[1180px] items-center justify-between gap-6 px-8 py-[22px]">
+      <Wordmark />
+
+      <nav className="hidden items-center gap-[30px] text-[14.5px] font-medium md:flex">
+        {publicNav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              "transition-colors hover:text-[#c11119]",
+              isActive(pathname, item.href) ? "text-[#eb1c24]" : "text-[#1c1717]"
+            )}
+          >
+            {item.label}
+          </Link>
+        ))}
         <Link
-          href="/"
-          className="flex items-center gap-2"
-          aria-label="Gekidokan — inicio"
+          href="/contacto"
+          className="disp rounded-[7px] bg-[#eb1c24] px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#c11119]"
         >
-          <Image
-            src="/images/brand/logotipo.png"
-            alt="Gekidokan"
-            width={140}
-            height={32}
-            className="h-8 w-auto"
-            priority
-          />
+          Inscríbete
         </Link>
+      </nav>
 
-        <nav className="ml-auto hidden items-center gap-1 md:flex">
-          {publicNav.map((item) => (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger
+          className="inline-flex size-9 items-center justify-center rounded-md text-[#1c1717] md:hidden"
+          aria-label="Abrir menú"
+        >
+          <IconMenu2 />
+        </SheetTrigger>
+        <SheetContent side="right" className="w-64">
+          <SheetTitle className="disp px-4 pt-4">Menú</SheetTitle>
+          <nav className="flex flex-col gap-1 p-4 text-[15px] font-medium">
+            {publicNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "rounded-md px-3 py-2 transition-colors",
+                  isActive(pathname, item.href)
+                    ? "text-[#eb1c24]"
+                    : "text-[#1c1717] hover:text-[#c11119]"
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
             <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "rounded-3xl px-3 py-2 text-sm font-medium transition-colors",
-                isActive(pathname, item.href)
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
-              )}
+              href="/contacto"
+              onClick={() => setOpen(false)}
+              className="disp mt-2 rounded-[7px] bg-[#eb1c24] px-4 py-2.5 text-center text-[13px] font-semibold text-white"
             >
-              {item.label}
+              Inscríbete
             </Link>
-          ))}
-          <Button asChild size="sm" className="ml-2">
-            <Link href="/login">Ingresar</Link>
-          </Button>
-        </nav>
-
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild className="ml-auto md:hidden">
-            <Button variant="ghost" size="icon" aria-label="Abrir menú">
-              <IconMenu2 />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-64">
-            <SheetTitle className="px-4 pt-4">Menú</SheetTitle>
-            <nav className="flex flex-col gap-1 p-4">
-              {publicNav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-3xl px-3 py-2 text-sm font-medium transition-colors",
-                    isActive(pathname, item.href)
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <Button asChild size="sm" className="mt-2">
-                <Link href="/login" onClick={() => setOpen(false)}>
-                  Ingresar
-                </Link>
-              </Button>
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
+          </nav>
+        </SheetContent>
+      </Sheet>
     </header>
   )
 }

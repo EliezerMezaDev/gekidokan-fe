@@ -3,11 +3,8 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { IconArrowLeft } from "@tabler/icons-react"
 import { getBlogPost, getBlogPosts } from "@/modules/public/api"
-import { formatDate } from "@/modules/public/format"
-import { Badge } from "@/shadcn/badge"
-import { Button } from "@/shadcn/button"
+import { formatShortDate } from "@/modules/public/format"
 
 export const revalidate = 3600
 
@@ -38,6 +35,9 @@ export async function generateMetadata({
   }
 }
 
+const stripes =
+  "repeating-linear-gradient(45deg,#efe7e7,#efe7e7 12px,#e7dede 12px,#e7dede 24px)"
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -48,22 +48,37 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   return (
-    <article className="mx-auto max-w-2xl px-4 py-12">
-      <Button asChild variant="ghost" size="sm" className="mb-6">
-        <Link href="/blog">
-          <IconArrowLeft /> Volver al blog
-        </Link>
-      </Button>
+    <article className="mx-auto max-w-[760px] px-8 pt-[30px] pb-15">
+      <Link
+        href="/blog"
+        className="disp mb-[26px] inline-block text-[13px] font-semibold text-[#eb1c24]"
+      >
+        ← Volver al blog
+      </Link>
 
-      <Badge variant="secondary">{post.category}</Badge>
-      <h1 className="mt-3 font-heading text-3xl font-bold text-balance">
+      <div className="mb-4 flex items-center gap-3">
+        <span className="disp rounded-md bg-[#eb1c24] px-3 py-[5px] text-[11px] font-semibold text-white">
+          {post.category}
+        </span>
+        <span className="text-[13px] text-[#9a9090]">
+          {formatShortDate(post.publishedAt)}
+        </span>
+      </div>
+
+      <h1 className="disp mb-6 text-[38px] leading-[1.12] font-bold text-balance">
         {post.title}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        {formatDate(post.publishedAt)}
-      </p>
 
-      <div className="mt-8 flex flex-col gap-4 text-[15px] leading-relaxed [&_a]:text-primary [&_a]:underline [&_h2]:mt-4 [&_h2]:font-heading [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:font-heading [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-6">
+      <div
+        className="mb-[30px] flex aspect-16/8 items-end rounded-xl p-3.5"
+        style={{ background: stripes }}
+      >
+        <span className="rounded bg-[#f7f1f1] px-2 py-1 font-mono text-[11px] text-[#8a8080]">
+          foto · {post.category.toLowerCase()}
+        </span>
+      </div>
+
+      <div className="text-[16.5px] leading-[1.8] text-[#3a3333] [&_a]:text-[#eb1c24] [&_a]:underline [&_h2]:disp [&_h2]:mt-[34px] [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1c1717] [&_li]:ml-1 [&_ol]:mb-[18px] [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-[18px] [&_strong]:font-semibold [&_ul]:mb-[18px] [&_ul]:list-disc [&_ul]:pl-6">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {post.bodyMarkdown}
         </ReactMarkdown>

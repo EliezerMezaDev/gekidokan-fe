@@ -137,3 +137,32 @@ register variants
     @apply font-sans;
     }
 }
+
+/*
+
+Portal público: tipografía "display" (Chakra Petch en scope público) y campos de
+formulario con estilo subrayado del diseño. Ver (public)/layout.tsx.
+
+*/
+.disp {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.fld {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #d8cccc;
+  background: transparent;
+  padding: 12px 2px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: #1c1717;
+  outline: none;
+}
+.fld:focus {
+  border-bottom-color: #eb1c24;
+}
+.fld::placeholder {
+  color: #a89f9f;
+}

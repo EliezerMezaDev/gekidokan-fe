@@ -52,9 +52,33 @@ export const blogPostSchema = blogPostSummarySchema.extend({
 })
 export type BlogPost = z.infer<typeof blogPostSchema>
 
+// Opciones del formulario de contacto (selects del diseño). interest = tipo de
+// clase de interés; source = cómo nos conoció. Opcionales.
+export const contactInterestSchema = z.enum([
+  "INFANTIL",
+  "JOVENES_ADULTOS",
+  "KOBUDO",
+  "FAMILIAS",
+])
+export type ContactInterest = z.infer<typeof contactInterestSchema>
+
+export const contactSourceSchema = z.enum([
+  "RECOMENDACION",
+  "REDES",
+  "BUSQUEDA",
+  "PASO_DOJO",
+])
+export type ContactSource = z.infer<typeof contactSourceSchema>
+
+// interest/source son opcionales. El <select> vacío envía "" ; el formulario lo
+// normaliza a undefined con setValueAs en el register (ver contacto/page.tsx).
 export const contactSchema = z.object({
   name: z.string().min(2, "Ingresa tu nombre"),
+  lastName: z.string().min(2, "Ingresa tu apellido"),
   email: z.email("Correo electrónico inválido"),
-  message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres"),
+  phone: z.string().min(7, "Ingresa un teléfono válido"),
+  interest: contactInterestSchema.optional(),
+  source: contactSourceSchema.optional(),
+  message: z.string().optional(),
 })
 export type ContactInput = z.infer<typeof contactSchema>

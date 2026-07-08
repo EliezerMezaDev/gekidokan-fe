@@ -1,66 +1,45 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getBlogPosts } from "@/modules/public/api"
-import { formatDate } from "@/modules/public/format"
-import { Badge } from "@/shadcn/badge"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/shadcn/card"
 import { EmptyState } from "@/shared/components/states"
+import { BlogList } from "./blog-list"
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Artículos sobre Karate, Kobudo, técnica y vida en el dojo de la academia Gekidokan.",
+    "Historia, técnica, salud y vida en el tatami. Artículos del Bushidō Dōjō para acompañar tu camino en las artes marciales.",
 }
 
 export default async function BlogListPage() {
   const posts = await getBlogPosts()
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12">
-      <header className="mb-8">
-        <h1 className="font-heading text-3xl font-bold">Blog</h1>
-        <p className="mt-2 text-muted-foreground">
-          Novedades, técnica y filosofía del dojo.
+    <div>
+      <section className="mx-auto max-w-[1180px] px-8 pt-9 pb-2.5">
+        <p className="disp mb-3 flex items-center gap-2 text-sm font-semibold text-[#eb1c24]">
+          <span className="h-0.5 w-[22px] bg-[#eb1c24]" />
+          Artículos y noticias
         </p>
-      </header>
+        <h1 className="disp mb-3.5 text-[46px] leading-[1.05] font-bold">
+          Blog del dōjō
+        </h1>
+        <p className="max-w-[560px] text-base leading-relaxed text-[#6b6363]">
+          Historia, técnica, salud y vida en el tatami. Lecturas para acompañar
+          tu camino en las artes marciales.
+        </p>
+      </section>
 
-      {posts.length === 0 ? (
-        <EmptyState
-          title="Aún no hay publicaciones"
-          description="Estamos preparando contenido. Vuelve pronto."
-        />
-      ) : (
-        <div className="grid gap-6 md:grid-cols-3">
-          {posts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <Card className="h-full transition-shadow hover:shadow-lg">
-                <CardHeader>
-                  <Badge variant="secondary" className="w-fit">
-                    {post.category}
-                  </Badge>
-                  <CardTitle className="mt-1">{post.title}</CardTitle>
-                  <CardDescription>
-                    {formatDate(post.publishedAt)}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      )}
+      <section className="mx-auto max-w-[1180px] px-8 pt-4 pb-15">
+        {posts.length === 0 ? (
+          <EmptyState
+            title="Aún no hay publicaciones"
+            description="Estamos preparando contenido. Vuelve pronto."
+          />
+        ) : (
+          <BlogList posts={posts} />
+        )}
+      </section>
     </div>
   )
 }
