@@ -9,20 +9,14 @@ import { IconAlertTriangle } from "@tabler/icons-react"
 import { loginSchema, type LoginInput } from "@/shared/schemas/auth"
 import { login, homeForRole } from "@/shared/lib/auth"
 import { ApiError } from "@/shared/lib/api"
+import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/shadcn/button"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/shadcn/card"
 import { Alert, AlertDescription } from "@/shadcn/alert"
 
 function safeNext(next: string | null): string | null {
-  // Evita open-redirect: solo rutas internas.
   return next && next.startsWith("/") && !next.startsWith("//") ? next : null
 }
 
@@ -56,67 +50,100 @@ function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl text-primary">Gekidokan</CardTitle>
-        <CardDescription>Inicia sesión para continuar</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-          noValidate
-        >
-          {formError ? (
-            <Alert variant="destructive">
-              <IconAlertTriangle className="size-4" />
-              <AlertDescription>{formError}</AlertDescription>
-            </Alert>
+    <div className="w-full max-w-md rounded-xl bg-card/95 p-12 shadow-2xl backdrop-blur">
+      <div className="flex items-center justify-center">
+        <img
+          src="/images/brand/isologo.png"
+          alt="Gekidokan - Logo"
+          className="h-24 w-24 rounded-full object-contain"
+        />
+      </div>
+
+      <h1 className="text-center text-2xl font-bold">Inicia sesión</h1>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-6 flex flex-col gap-4"
+        noValidate
+      >
+        {formError ? (
+          <Alert variant="destructive">
+            <IconAlertTriangle className="size-4" />
+            <AlertDescription>{formError}</AlertDescription>
+          </Alert>
+        ) : null}
+
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email">Correo electrónico</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="tu@correo.com"
+            autoComplete="email"
+            {...register("email")}
+          />
+          {errors.email ? (
+            <p className="text-sm text-destructive">{errors.email.message}</p>
           ) : null}
+        </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email">Correo electrónico</Label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              {...register("email")}
-            />
-            {errors.email ? (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
             <Label htmlFor="password">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              {...register("password")}
-            />
-            {errors.password ? (
-              <p className="text-sm text-destructive">
-                {errors.password.message}
-              </p>
-            ) : null}
+            <Link
+              href="#"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
           </div>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Tu contraseña"
+            autoComplete="current-password"
+            {...register("password")}
+          />
+          {errors.password ? (
+            <p className="text-sm text-destructive">
+              {errors.password.message}
+            </p>
+          ) : null}
+        </div>
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Ingresando…" : "Ingresar"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Ingresando…" : "Ingresar"}
+        </Button>
+      </form>
+    </div>
   )
 }
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-svh items-center justify-center p-4">
-      <Suspense>
-        <LoginForm />
-      </Suspense>
+    <div className="relative min-h-svh w-full overflow-hidden bg-background">
+      <div className="absolute inset-4 overflow-hidden rounded-lg">
+        <Image
+          src="/images/assets/patter-light.svg"
+          alt=""
+          fill
+          priority
+          className="object-cover dark:hidden"
+        />
+        <Image
+          src="/images/assets/pattern-dark.svg"
+          alt=""
+          fill
+          priority
+          className="hidden object-cover dark:block"
+        />
+      </div>
+
+      <div className="relative z-10 flex min-h-svh items-center justify-center">
+        <Suspense>
+          <LoginForm />
+        </Suspense>
+      </div>
     </div>
   )
 }
