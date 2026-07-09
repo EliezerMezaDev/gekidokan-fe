@@ -12,16 +12,20 @@ const links = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-[#1c1717] px-8 pt-14 pb-7 text-[#f7f1f1]">
+    <footer className="bg-foreground px-8 pt-14 pb-7 text-background">
       <div className="mx-auto grid max-w-[1180px] gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <div className="disp mb-[18px] flex items-center gap-[9px] text-[26px] font-bold text-white">
-            <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-md bg-[#eb1c24] text-[17px]">
-              武
+            <span className="h-10 w-10">
+              <img
+                src="/images/brand/isologo.png"
+                alt="Gekidokan - Logo"
+                className="h-full w-full rounded-full object-contain"
+              />
             </span>
-            BUSHIDŌ
+            Gekidokan
           </div>
-          <p className="max-w-[280px] text-sm leading-relaxed text-[#a89f9f]">
+          <p className="max-w-[280px] text-sm leading-relaxed text-ink-subtle">
             Karate y Kobudo tradicional de Okinawa. Disciplina, respeto y
             comunidad desde 2005.
           </p>
@@ -36,7 +40,7 @@ export function SiteFooter() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-[#a89f9f] transition-colors hover:text-white"
+                className="text-ink-subtle transition-colors hover:text-white"
               >
                 {l.label}
               </Link>
@@ -48,31 +52,25 @@ export function SiteFooter() {
           <h4 className="disp mb-4 text-sm font-semibold tracking-[0.05em] text-white">
             Contacto
           </h4>
-          <div className="flex flex-col gap-[11px] text-sm text-[#a89f9f]">
-            <span>+52 55 1234 5678</span>
+          <div className="flex flex-col gap-[11px] text-sm text-ink-subtle">
             <a
-              href="mailto:hola@bushidodojo.mx"
+              href="http://wa.me/+584143210449"
               className="transition-colors hover:text-white"
             >
-              hola@bushidodojo.mx
+              (+58) 414-3210449
+            </a>
+            <a
+              href="mailto:contacto@gekidokan.com.ve"
+              className="transition-colors hover:text-white"
+            >
+              contacto@gekidokan.com.ve
             </a>
             <span>Av. del Dojo 58, CDMX</span>
           </div>
         </div>
-
-        <div>
-          <h4 className="disp mb-4 text-sm font-semibold tracking-[0.05em] text-white">
-            Horario
-          </h4>
-          <div className="flex flex-col gap-[11px] text-sm text-[#a89f9f]">
-            <span>Lun a Vie · 9:00 – 20:30</span>
-            <span>Sábado · 9:00 – 14:00</span>
-            <span>Domingo · Descanso</span>
-          </div>
-        </div>
       </div>
-      <div className="mx-auto mt-[38px] max-w-[1180px] border-t border-[#332b2b] pt-[22px] text-center text-[13px] text-[#6f6666]">
-        © 2026 Bushidō Dōjō. Todos los derechos reservados.
+      <div className="mx-auto mt-[38px] max-w-[1180px] border-t border-line-inverse pt-[22px] text-center text-[13px] text-ink-muted">
+        © 2026 Gekidokan. Todos los derechos reservados.
       </div>
     </footer>
   )

@@ -1,15 +1,15 @@
 import type { Metadata } from "next"
+import { SectionHeader } from "@/modules/public/components/section-header"
 
 export const metadata: Metadata = {
   title: "Clases y horarios",
   description:
-    "Programación semanal de las clases de Karate y Kobudo en Bushidō Dōjō: estilo, instructor y horario de cada sesión.",
+    "Programación semanal de las clases de Karate y Kobudo en Gekidokan: estilo, instructor y horario de cada sesión.",
 }
 
-// Paletas de celda del diseño: K = Karate, H = destacada, B = Kobudo.
-const K = { bg: "#efe7e7", fg: "#1c1717" }
-const H = { bg: "#eb1c24", fg: "#ffffff" }
-const B = { bg: "#1c1717", fg: "#ffffff" }
+const K = { bg: "var(--stripe-a)", fg: "var(--foreground)" }
+const H = { bg: "var(--primary)", fg: "var(--card)" }
+const B = { bg: "var(--foreground)", fg: "var(--card)" }
 
 type Cell = {
   title: string
@@ -25,29 +25,6 @@ const cell = (
   inst: string,
   s: { bg: string; fg: string }
 ): Cell => ({ title, range, inst, ...s })
-
-const styles = [
-  {
-    k: "空",
-    name: "Karate fundamentos",
-    desc: "Base de kihon, kata y kumite para todos los niveles.",
-  },
-  {
-    k: "武",
-    name: "Kobudo Okinawa",
-    desc: "Armas tradicionales: bo, sai, tonfa y nunchaku.",
-  },
-  {
-    k: "力",
-    name: "Fuerza y velocidad",
-    desc: "Acondicionamiento físico orientado al combate.",
-  },
-  {
-    k: "黒",
-    name: "Cinturón negro",
-    desc: "Preparación avanzada para grados dan.",
-  },
-]
 
 const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
 
@@ -124,68 +101,41 @@ const gridCols = "88px repeat(6,1fr)"
 
 export default function ClassesPage() {
   return (
-    <div>
-      {/* CABECERA */}
+    <div className="my-20">
       <section className="mx-auto max-w-[1180px] px-8 pt-9 pb-2.5">
-        <p className="disp mb-3 flex items-center gap-2 text-sm font-semibold text-[#eb1c24]">
-          <span className="h-0.5 w-[22px] bg-[#eb1c24]" />
-          Programa semanal
-        </p>
-        <h1 className="disp mb-3.5 text-[46px] leading-[1.05] font-bold">
-          Clases y horarios
-        </h1>
-        <p className="max-w-[560px] text-base leading-relaxed text-[#6b6363]">
-          Consulta la programación semanal de nuestras clases de Karate y
-          Kobudo. Cada sesión indica el estilo, el instructor y el rango
-          horario.
-        </p>
+        <SectionHeader
+          eyebrow="Programa semanal"
+          title="Clases y horarios"
+          lead="Consulta la programación semanal de nuestras clases de Karate y Kobudo. Cada sesión indica el estilo, el instructor y el rango horario."
+        />
       </section>
 
-      {/* TARJETAS DE ESTILO */}
-      <section className="mx-auto grid max-w-[1180px] gap-4 px-8 py-6.5 sm:grid-cols-2 lg:grid-cols-4">
-        {styles.map((s) => (
-          <div
-            key={s.name}
-            className="rounded-xl border border-[#ece3e3] bg-white p-[22px]"
-          >
-            <div className="disp mb-3.5 flex h-10 w-10 items-center justify-center rounded-lg bg-[#eb1c24] text-lg font-bold text-white">
-              {s.k}
-            </div>
-            <h3 className="disp mb-1.5 text-base font-bold">{s.name}</h3>
-            <p className="text-[13px] leading-[1.5] text-[#6b6363]">{s.desc}</p>
-          </div>
-        ))}
-      </section>
-
-      {/* GRID SEMANAL */}
       <section className="mx-auto max-w-[1180px] overflow-x-auto px-8 pt-5 pb-10">
-        <div className="min-w-[820px] overflow-hidden rounded-xl border border-[#e6dcdc] bg-white">
-          {/* fila de encabezado */}
+        <div className="min-w-[820px] overflow-hidden rounded-xl border border-line-strong bg-white">
           <div className="grid" style={{ gridTemplateColumns: gridCols }}>
-            <div className="bg-[#eb1c24]" />
+            <div className="bg-primary" />
             {days.map((d) => (
               <div
                 key={d}
-                className="disp bg-[#eb1c24] px-1.5 py-4 text-center text-[13px] font-bold text-white"
+                className="disp bg-primary px-1.5 py-4 text-center text-[13px] font-bold text-white"
               >
                 {d}
               </div>
             ))}
           </div>
-          {/* filas */}
           {rows.map((row) => (
             <div
               key={row.time}
-              className="grid border-t border-[#f0e8e8]"
+              className="grid border-t border-line-soft"
               style={{ gridTemplateColumns: gridCols }}
             >
-              <div className="disp flex items-center justify-center border-r border-[#f0e8e8] px-2 py-[18px] text-[13px] font-bold">
+              <div className="disp flex items-center justify-center border-r border-line-soft px-2 py-[18px] text-[13px] font-bold">
                 {row.time}
               </div>
               {row.cells.map((c, i) => (
                 <div
                   key={i}
-                  className="min-h-[78px] border-r border-[#f6efef] p-1.5"
+                  className="min-h-[78px] border-r border-line-soft p-1.5"
                 >
                   {c ? (
                     <div
@@ -206,17 +156,17 @@ export default function ClassesPage() {
             </div>
           ))}
         </div>
-        <div className="mt-4 flex flex-wrap gap-5 text-[12.5px] text-[#6b6363]">
+        <div className="mt-4 flex flex-wrap gap-5 text-[12.5px] text-ink-muted">
           <span className="flex items-center gap-[7px]">
-            <span className="h-3.5 w-3.5 rounded-[3px] bg-[#eb1c24]" />
+            <span className="h-3.5 w-3.5 rounded-[3px] bg-primary" />
             Clase destacada
           </span>
           <span className="flex items-center gap-[7px]">
-            <span className="h-3.5 w-3.5 rounded-[3px] border border-[#dddddd] bg-[#efe7e7]" />
+            <span className="h-3.5 w-3.5 rounded-[3px] border border-line-strong bg-[var(--stripe-a)]" />
             Karate
           </span>
           <span className="flex items-center gap-[7px]">
-            <span className="h-3.5 w-3.5 rounded-[3px] bg-[#1c1717]" />
+            <span className="h-3.5 w-3.5 rounded-[3px] bg-foreground" />
             Kobudo
           </span>
         </div>

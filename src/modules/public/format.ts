@@ -17,8 +17,18 @@ export function formatDate(iso: string): string {
 // Fecha corta del diseño: "28 Feb, 2026". Determinista (UTC) y con abreviatura
 // capitalizada, que Intl no da en español.
 const shortMonths = [
-  "Ene", "Feb", "Mar", "Abr", "May", "Jun",
-  "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",
+  "Ene",
+  "Feb",
+  "Mar",
+  "Abr",
+  "May",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dic",
 ]
 
 export function formatShortDate(iso: string): string {

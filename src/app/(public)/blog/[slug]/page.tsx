@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { getBlogPost, getBlogPosts } from "@/modules/public/api"
 import { formatShortDate } from "@/modules/public/format"
+import { PhotoPlaceholder } from "@/modules/public/components/photo-placeholder"
 
 export const revalidate = 3600
 
@@ -35,9 +36,6 @@ export async function generateMetadata({
   }
 }
 
-const stripes =
-  "repeating-linear-gradient(45deg,#efe7e7,#efe7e7 12px,#e7dede 12px,#e7dede 24px)"
-
 export default async function BlogPostPage({
   params,
 }: {
@@ -48,19 +46,19 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   return (
-    <article className="mx-auto max-w-[760px] px-8 pt-[30px] pb-15">
+    <article className="mx-auto max-w-[760px] px-8 pt-[80px] pb-15">
       <Link
         href="/blog"
-        className="disp mb-[26px] inline-block text-[13px] font-semibold text-[#eb1c24]"
+        className="disp mb-[26px] inline-block text-[13px] font-semibold text-primary"
       >
         ← Volver al blog
       </Link>
 
       <div className="mb-4 flex items-center gap-3">
-        <span className="disp rounded-md bg-[#eb1c24] px-3 py-[5px] text-[11px] font-semibold text-white">
+        <span className="disp rounded-md bg-primary px-3 py-[5px] text-[11px] font-semibold text-white">
           {post.category}
         </span>
-        <span className="text-[13px] text-[#9a9090]">
+        <span className="text-[13px] text-ink-subtle">
           {formatShortDate(post.publishedAt)}
         </span>
       </div>
@@ -69,16 +67,13 @@ export default async function BlogPostPage({
         {post.title}
       </h1>
 
-      <div
-        className="mb-[30px] flex aspect-16/8 items-end rounded-xl p-3.5"
-        style={{ background: stripes }}
-      >
-        <span className="rounded bg-[#f7f1f1] px-2 py-1 font-mono text-[11px] text-[#8a8080]">
-          foto · {post.category.toLowerCase()}
-        </span>
-      </div>
+      <PhotoPlaceholder
+        label={`foto · ${post.category.toLowerCase()}`}
+        step={12}
+        className="mb-[30px] aspect-16/8 rounded-xl p-3.5"
+      />
 
-      <div className="text-[16.5px] leading-[1.8] text-[#3a3333] [&_a]:text-[#eb1c24] [&_a]:underline [&_h2]:disp [&_h2]:mt-[34px] [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#1c1717] [&_li]:ml-1 [&_ol]:mb-[18px] [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-[18px] [&_strong]:font-semibold [&_ul]:mb-[18px] [&_ul]:list-disc [&_ul]:pl-6">
+      <div className="[&_h2]:disp text-[16.5px] leading-[1.8] text-ink [&_a]:text-primary [&_a]:underline [&_h2]:mt-[34px] [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-foreground [&_li]:ml-1 [&_ol]:mb-[18px] [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-[18px] [&_strong]:font-semibold [&_ul]:mb-[18px] [&_ul]:list-disc [&_ul]:pl-6">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {post.bodyMarkdown}
         </ReactMarkdown>

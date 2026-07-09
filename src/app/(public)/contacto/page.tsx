@@ -6,22 +6,62 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { contactSchema, type ContactInput } from "@/shared/schemas/public"
 import { submitContact } from "@/modules/public/api"
-
-// Metadata no se exporta desde un client component; el <title> lo cubre el
-// layout raíz. El foco de esta página es el formulario (US-12).
-
-const stripes =
-  "repeating-linear-gradient(45deg,#efe7e7,#efe7e7 12px,#e7dede 12px,#e7dede 24px)"
+import {
+  SectionHeader,
+  Eyebrow,
+} from "@/modules/public/components/section-header"
+import { PhotoPlaceholder } from "@/modules/public/components/photo-placeholder"
 
 const info = [
-  { icon: "📍", title: "Sede", lines: "Av. del Dojo 58,\nCol. Centro, CDMX 06000" },
-  { icon: "✆", title: "Llámanos", lines: "+52 55 1234 5678\n+52 55 8765 4321" },
   {
-    icon: "✉",
-    title: "Escríbenos",
-    lines: "hola@bushidodojo.mx\ninscripciones@bushidodojo.mx",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6" />
+      </svg>
+    ),
+    title: "Sede",
+    lines: "Av. del Dojo 58,\nCol. Centro, CDMX 06000",
   },
-  { icon: "🕑", title: "Horario", lines: "Lun a Vie · 9:00 – 20:30\nSáb · 9:00 – 14:00" },
+  {
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M18.497 4.409a10 10 0 0 1 -10.36 16.828l-.223 -.098l-4.759 .849l-.11 .011a1 1 0 0 1 -.11 0l-.102 -.013l-.108 -.024l-.105 -.037l-.099 -.047l-.093 -.058l-.014 -.011l-.012 -.007l-.086 -.073l-.077 -.08l-.067 -.088l-.056 -.094l-.034 -.07l-.04 -.108l-.028 -.128l-.012 -.102a1 1 0 0 1 0 -.125l.012 -.1l.024 -.11l.045 -.122l1.433 -3.304l-.009 -.014a10 10 0 0 1 1.549 -12.454l.215 -.203a10 10 0 0 1 13.226 -.217m-8.997 3.09a1.5 1.5 0 0 0 -1.5 1.5v1a6 6 0 0 0 6 6h1a1.5 1.5 0 0 0 0 -3h-1l-.144 .007a1.5 1.5 0 0 0 -1.128 .697l-.042 .074l-.022 -.007a4.01 4.01 0 0 1 -2.435 -2.435l-.008 -.023l.075 -.041a1.5 1.5 0 0 0 .704 -1.272v-1a1.5 1.5 0 0 0 -1.5 -1.5" />
+      </svg>
+    ),
+    title: "Llámanos",
+    lines: "(+58) 414-3210449",
+  },
+  {
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M22 7.535v9.465a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-9.465l9.445 6.297l.116 .066a1 1 0 0 0 .878 0l.116 -.066l9.445 -6.297z" />
+        <path d="M19 4c1.08 0 2.027 .57 2.555 1.427l-9.555 6.37l-9.555 -6.37a2.999 2.999 0 0 1 2.354 -1.42l.201 -.007h14z" />
+      </svg>
+    ),
+    title: "Escríbenos",
+    lines: "contacto@gekidokan.com.ve",
+  },
 ]
 
 const interests = [
@@ -72,34 +112,26 @@ export default function ContactPage() {
   }
 
   return (
-    <div>
-      {/* CABECERA */}
+    <div className="my-20">
       <section className="mx-auto max-w-[1180px] px-8 pt-9 pb-1.5">
-        <p className="disp mb-3 flex items-center gap-2 text-sm font-semibold text-[#eb1c24]">
-          <span className="h-0.5 w-[22px] bg-[#eb1c24]" />
-          Visítanos
-        </p>
-        <h1 className="disp mb-3.5 text-[46px] leading-[1.05] font-bold">
-          Nuestra ubicación
-        </h1>
-        <p className="max-w-[560px] text-base leading-relaxed text-[#6b6363]">
-          ¿Listo para empezar? Escríbenos o pásate por el dōjō. Estaremos
-          encantados de resolver tus dudas y darte la bienvenida.
-        </p>
+        <SectionHeader
+          eyebrow="Visítanos"
+          title="Nuestra ubicación"
+          lead="¿Listo para empezar? Escríbenos o pásate por el dōjō. Estaremos encantados de resolver tus dudas y darte la bienvenida."
+        />
       </section>
 
-      {/* TARJETAS DE INFO */}
-      <section className="mx-auto grid max-w-[1180px] gap-4 px-8 py-7 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mx-auto grid max-w-[1180px] gap-4 px-8 py-7 sm:grid-cols-2 lg:grid-cols-3">
         {info.map((i) => (
           <div
             key={i.title}
-            className="rounded-xl border border-[#ece3e3] bg-white px-[22px] py-6"
+            className="rounded-xl border border-line bg-white px-[22px] py-6"
           >
-            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-[#eb1c24] text-[19px] text-white">
+            <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-[19px] text-white">
               {i.icon}
             </div>
             <h3 className="disp mb-2 text-[15px] font-bold">{i.title}</h3>
-            <p className="text-[13.5px] leading-[1.55] whitespace-pre-line text-[#6b6363]">
+            <p className="text-[13.5px] leading-[1.55] whitespace-pre-line text-ink-muted">
               {i.lines}
             </p>
           </div>
@@ -108,38 +140,32 @@ export default function ContactPage() {
 
       {/* FORMULARIO + IMAGEN */}
       <section className="mx-auto grid max-w-[1180px] items-center gap-12 px-8 py-6 md:grid-cols-[0.85fr_1fr]">
-        <div
-          className="flex aspect-3/4 items-end justify-center rounded-[14px] p-[18px]"
-          style={{ background: stripes }}
-        >
-          <span className="rounded bg-[#f7f1f1] px-2 py-1 font-mono text-[11px] text-[#8a8080]">
-            foto · combate kumite
-          </span>
-        </div>
+        <PhotoPlaceholder
+          label="foto · combate kumite"
+          step={12}
+          className="aspect-3/4 justify-center rounded-[14px] p-[18px]"
+        />
 
         <div>
-          <p className="disp mb-2.5 flex items-center gap-2 text-sm font-semibold text-[#eb1c24]">
-            <span className="h-0.5 w-[22px] bg-[#eb1c24]" />
-            Estamos para ti
-          </p>
+          <Eyebrow className="mb-2.5">Estamos para ti</Eyebrow>
           <h2 className="disp mb-2 text-[36px] font-bold">Escríbenos</h2>
-          <p className="mb-7 text-[15px] text-[#6b6363]">
+          <p className="mb-7 text-[15px] text-ink-muted">
             Completa el formulario y te responderemos en menos de 24 horas.
           </p>
 
           {sent ? (
-            <div className="rounded-xl bg-[#1c1717] px-7 py-6.5 text-white shadow-[6px_6px_0_#eb1c24]">
+            <div className="rounded-xl bg-foreground px-7 py-6.5 text-white shadow-[6px_6px_0_var(--primary)]">
               <div className="disp mb-2 text-xl font-bold">
                 ¡Mensaje enviado! 🥋
               </div>
-              <p className="text-[14.5px] text-[#c9c0c0]">
+              <p className="text-[14.5px] text-ink-inverse">
                 Gracias por escribirnos. Nuestro equipo te contactará muy
                 pronto.
               </p>
               <button
                 type="button"
                 onClick={() => setSent(false)}
-                className="disp mt-4 rounded-[7px] border border-[#4a4040] px-[18px] py-[9px] text-[12.5px] font-semibold text-white"
+                className="disp mt-4 rounded-[7px] border border-line-inverse px-[18px] py-[9px] text-[12.5px] font-semibold text-white"
               >
                 Enviar otro
               </button>
@@ -181,7 +207,7 @@ export default function ContactPage() {
                   />
                 </Field>
                 <select
-                  className="fld text-[#6b6363]"
+                  className="fld text-ink-muted"
                   defaultValue=""
                   {...register("interest", {
                     setValueAs: (v) => (v === "" ? undefined : v),
@@ -195,7 +221,7 @@ export default function ContactPage() {
                   ))}
                 </select>
                 <select
-                  className="fld text-[#6b6363]"
+                  className="fld text-ink-muted"
                   defaultValue=""
                   {...register("source", {
                     setValueAs: (v) => (v === "" ? undefined : v),
@@ -217,7 +243,7 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="disp w-full rounded-[9px] bg-[#eb1c24] p-[17px] text-[15px] font-semibold text-white transition-colors hover:bg-[#c11119] disabled:opacity-50"
+                className="disp w-full rounded-[9px] bg-primary p-[17px] text-[15px] font-semibold text-white transition-colors hover:bg-primary-strong disabled:opacity-50"
               >
                 {isSubmitting ? "Enviando…" : "Enviar mensaje"}
               </button>
@@ -227,34 +253,14 @@ export default function ContactPage() {
       </section>
 
       {/* MAPA */}
-      <section className="mx-auto max-w-[1180px] px-8 pt-5 pb-12.5">
-        <div className="relative flex h-[340px] items-center justify-center overflow-hidden rounded-[14px] bg-[#2a2626]">
-          <div
-            className="absolute inset-0 opacity-60"
-            style={{
-              backgroundImage:
-                "linear-gradient(#3a3535 1px,transparent 1px),linear-gradient(90deg,#3a3535 1px,transparent 1px)",
-              backgroundSize: "52px 52px",
-            }}
-          />
-          <div className="relative text-center">
-            <div className="mx-auto mb-3.5 h-10 w-10 rotate-[-45deg] rounded-tl-full rounded-tr-full rounded-bl-full bg-[#eb1c24] shadow-[0_6px_16px_rgba(0,0,0,0.4)]" />
-            <div className="disp text-base font-bold text-white">
-              Bushidō Dōjō
-            </div>
-            <div className="mt-1 text-[13px] text-[#b7aeae]">
-              Av. del Dojo 58, Col. Centro · CDMX
-            </div>
-          </div>
-          <div className="absolute top-3.5 left-3.5 flex gap-1.5">
-            <span className="disp rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold text-[#1c1717]">
-              Mapa
-            </span>
-            <span className="disp rounded-md bg-white/15 px-3 py-1.5 text-[11px] font-semibold text-white">
-              Satélite
-            </span>
-          </div>
-        </div>
+      <section className="mx-auto aspect-video max-w-[1180px] px-8 pt-5 pb-12.5">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.19142939669!2d-63.86135108926896!3d11.024259654527935!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8c318f0077508737%3A0xdf23dc6f2f529231!2sGekidokan!5e0!3m2!1ses!2sus!4v1783620404687!5m2!1ses!2sus"
+
+          loading="lazy"
+          className="h-full w-full"
+          referrerPolicy="strict-origin-when-cross-origin"
+        ></iframe>
       </section>
     </div>
   )
@@ -270,7 +276,7 @@ function Field({
   return (
     <div>
       {children}
-      {error ? <p className="mt-1 text-xs text-[#eb1c24]">{error}</p> : null}
+      {error ? <p className="mt-1 text-xs text-primary">{error}</p> : null}
     </div>
   )
 }
