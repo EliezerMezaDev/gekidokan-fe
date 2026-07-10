@@ -17,7 +17,7 @@ export function BlogCard({
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="flex flex-col overflow-hidden rounded-xl border border-line bg-white text-inherit"
+      className="flex flex-col overflow-hidden rounded-xl border border-line bg-card text-inherit"
     >
       {compact ? (
         <div className="aspect-16/10" style={{ background: stripes() }} />

@@ -40,20 +40,20 @@ function Stepper({
   onBackTo: (i: number) => void
 }) {
   return (
-    <ol className="flex items-start">
+    <ol className="flex flex-col">
       {steps.map((s, i) => {
         const done = i < step
         const current = i === step
         return (
-          <li key={s.label} className="flex flex-1 items-start last:flex-none">
-            <div className="flex flex-col items-center gap-2">
+          <li key={s.label} className="flex items-start gap-3">
+            <div className="flex flex-col items-center">
               <button
                 type="button"
                 onClick={() => (done ? onBackTo(i) : undefined)}
                 disabled={!done}
                 aria-current={current ? "step" : undefined}
                 className={cn(
-                  "flex size-9 items-center justify-center rounded-full font-heading text-sm transition-colors",
+                  "flex size-9 shrink-0 items-center justify-center rounded-full font-heading text-sm transition-colors",
                   current && "bg-primary text-primary-foreground",
                   done && "bg-foreground text-background hover:opacity-80",
                   !current && !done && "bg-muted text-muted-foreground"
@@ -61,23 +61,23 @@ function Stepper({
               >
                 {done ? <IconCheck className="size-4" /> : i + 1}
               </button>
-              <span
-                className={cn(
-                  "disp max-w-20 text-center text-[10px] leading-tight",
-                  current ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                {s.label}
-              </span>
+              {i < steps.length - 1 ? (
+                <span
+                  className={cn(
+                    "my-1 w-px flex-1",
+                    i < step ? "bg-foreground" : "bg-border"
+                  )}
+                />
+              ) : null}
             </div>
-            {i < steps.length - 1 ? (
-              <span
-                className={cn(
-                  "mt-4.5 h-px flex-1",
-                  i < step ? "bg-foreground" : "bg-border"
-                )}
-              />
-            ) : null}
+            <span
+              className={cn(
+                "disp pt-2 text-[10px] leading-tight",
+                current ? "text-foreground" : "text-muted-foreground"
+              )}
+            >
+              {s.label}
+            </span>
           </li>
         )
       })}
@@ -136,15 +136,11 @@ export function StudentWizard() {
         </Button>
       </ModuleHeader>
 
-      <Card className="mx-auto max-w-2xl p-6 sm:p-8">
+      <Card className="grid gap-8 p-6 sm:p-8 md:grid-cols-[220px_1fr]">
         <Stepper step={step} onBackTo={setStep} />
 
         {/* noValidate: la validación la maneja Zod, no el navegador. */}
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="mt-8"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
           {step === 0 ? <BasicFields form={form} /> : null}
           {step === 1 ? <AcademicFields form={form} /> : null}
           {step === 2 ? <AccessFields form={form} /> : null}

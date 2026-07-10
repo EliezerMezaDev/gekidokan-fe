@@ -97,7 +97,7 @@ export function NavUser() {
                 </Badge>
               ) : null}
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/d/profile")}>
               <IconUserCircle className="size-4" />
               Cuenta
             </DropdownMenuItem>

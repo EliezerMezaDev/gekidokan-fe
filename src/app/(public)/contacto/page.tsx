@@ -125,7 +125,7 @@ export default function ContactPage() {
         {info.map((i) => (
           <div
             key={i.title}
-            className="rounded-xl border border-line bg-white px-[22px] py-6"
+            className="rounded-xl border border-line bg-card px-[22px] py-6"
           >
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-[19px] text-white">
               {i.icon}
@@ -154,18 +154,18 @@ export default function ContactPage() {
           </p>
 
           {sent ? (
-            <div className="rounded-xl bg-foreground px-7 py-6.5 text-white shadow-[6px_6px_0_var(--primary)]">
+            <div className="rounded-xl bg-foreground px-7 py-6.5 text-background shadow-[6px_6px_0_var(--primary)]">
               <div className="disp mb-2 text-xl font-bold">
                 ¡Mensaje enviado! 🥋
               </div>
-              <p className="text-[14.5px] text-ink-inverse">
+              <p className="text-[14.5px] text-background/70">
                 Gracias por escribirnos. Nuestro equipo te contactará muy
                 pronto.
               </p>
               <button
                 type="button"
                 onClick={() => setSent(false)}
-                className="disp mt-4 rounded-[7px] border border-line-inverse px-[18px] py-[9px] text-[12.5px] font-semibold text-white"
+                className="disp mt-4 rounded-[7px] border border-background/25 px-[18px] py-[9px] text-[12.5px] font-semibold text-background"
               >
                 Enviar otro
               </button>

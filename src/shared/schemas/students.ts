@@ -30,6 +30,10 @@ export const studentSchema = z.object({
   guardianName: z.string().optional(),
   // Email/usuario de acceso al área de alumno (/s).
   accessUsername: z.email().optional(),
+  // Altura (cm) y peso (kg); opcionales porque no todos los alumnos los tienen
+  // capturados aún.
+  height: z.number().positive().optional(),
+  weight: z.number().positive().optional(),
   // ponytail: contenido habilitado como ids sueltos; el modelo real (minBeltRank
   // vs. tabla de acceso) queda bloqueado por DT-05.
   enabledContent: z.array(z.string()).default([]),
@@ -47,6 +51,8 @@ export const studentInputSchema = z.object({
   email: z.literal("").or(z.email("Correo inválido")),
   phone: z.string(),
   guardianName: z.string(),
+  height: z.number().positive().optional(),
+  weight: z.number().positive().optional(),
   enabledContent: z.array(z.string()),
   accessUsername: z.email("Correo de acceso inválido"),
 })

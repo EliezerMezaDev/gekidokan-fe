@@ -111,7 +111,7 @@ export default function ClassesPage() {
       </section>
 
       <section className="mx-auto max-w-[1180px] overflow-x-auto px-8 pt-5 pb-10">
-        <div className="min-w-[820px] overflow-hidden rounded-xl border border-line-strong bg-white">
+        <div className="min-w-[820px] overflow-hidden rounded-xl border border-line-strong bg-card">
           <div className="grid" style={{ gridTemplateColumns: gridCols }}>
             <div className="bg-primary" />
             {days.map((d) => (

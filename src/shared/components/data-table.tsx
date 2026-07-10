@@ -16,10 +16,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table"
 import {
-  IconChevronLeft,
-  IconChevronRight,
-  IconChevronsLeft,
-  IconChevronsRight,
   IconDotsVertical,
   IconDownload,
   IconLayoutColumns,
@@ -46,13 +42,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shadcn/dropdown-menu"
 import { Input } from "@/shadcn/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shadcn/select"
+import { TablePagination } from "./table-pagination"
 import {
   Table,
   TableBody,
@@ -409,79 +399,14 @@ export function DataTable<T>({
         </Table>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 px-1">
-        <div className="text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length > 0
-            ? `${table.getFilteredSelectedRowModel().rows.length} de ${table.getFilteredRowModel().rows.length} fila(s) seleccionadas.`
-            : `${table.getFilteredRowModel().rows.length} resultado(s).`}
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Filas</span>
-            <Select
-              value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(v) => table.setPageSize(Number(v))}
-            >
-              <SelectTrigger size="sm" className="w-16">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[10, 20, 30, 50].map((n) => (
-                  <SelectItem key={n} value={`${n}`}>
-                    {n}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <span className="text-sm text-muted-foreground">
-            Página {table.getState().pagination.pageIndex + 1} de{" "}
-            {table.getPageCount() || 1}
-          </span>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              className="size-8"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-              aria-label="Primera página"
-            >
-              <IconChevronsLeft className="size-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="size-8"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-              aria-label="Anterior"
-            >
-              <IconChevronLeft className="size-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="size-8"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              aria-label="Siguiente"
-            >
-              <IconChevronRight className="size-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="size-8"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-              aria-label="Última página"
-            >
-              <IconChevronsRight className="size-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
+      <TablePagination
+        pageIndex={table.getState().pagination.pageIndex}
+        pageSize={table.getState().pagination.pageSize}
+        total={table.getFilteredRowModel().rows.length}
+        selectedCount={table.getFilteredSelectedRowModel().rows.length}
+        onPageChange={table.setPageIndex}
+        onPageSizeChange={table.setPageSize}
+      />
     </div>
   )
 }

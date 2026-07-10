@@ -9,6 +9,7 @@ import type { ParsedFilter } from "@/shared/lib/filter-parser"
 import { getStudents } from "@/modules/students/api"
 import { ModuleHeader } from "@/shared/components/module-header"
 import { DataTable } from "@/shared/components/data-table"
+import { TablePagination } from "@/shared/components/table-pagination"
 import { ViewToggle, type ViewMode } from "@/shared/components/view-toggle"
 import {
   CardGridSkeleton,
@@ -48,6 +49,8 @@ export function StudentsView() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState<ViewMode>("table")
+  const [gridPageIndex, setGridPageIndex] = useState(0)
+  const [gridPageSize, setGridPageSize] = useState(12)
 
   const { filters, apply } = useQueryFilters(studentsQuerySchema)
 
@@ -73,6 +76,21 @@ export function StudentsView() {
   const visible = useMemo(
     () => applyStudentFilters(students, filters),
     [students, filters]
+  )
+
+  // ponytail: paginación de la grilla corre en cliente sobre los mocks, igual
+  // que el resto del filtrado (ver filters.ts); mover al backend cuando pagine.
+  useEffect(() => {
+    setGridPageIndex(0)
+  }, [filters, gridPageSize])
+
+  const gridPage = useMemo(
+    () =>
+      visible.slice(
+        gridPageIndex * gridPageSize,
+        gridPageIndex * gridPageSize + gridPageSize
+      ),
+    [visible, gridPageIndex, gridPageSize]
   )
 
   const actions = studentRowActions(router)
@@ -142,10 +160,19 @@ export function StudentsView() {
             description="Ningún alumno coincide con el filtro."
           />
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {visible.map((s) => (
-              <StudentCard key={s.id} student={s} actions={actions} />
-            ))}
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {gridPage.map((s) => (
+                <StudentCard key={s.id} student={s} actions={actions} />
+              ))}
+            </div>
+            <TablePagination
+              pageIndex={gridPageIndex}
+              pageSize={gridPageSize}
+              total={visible.length}
+              onPageChange={setGridPageIndex}
+              onPageSizeChange={setGridPageSize}
+            />
           </div>
         )}
       </div>

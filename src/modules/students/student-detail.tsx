@@ -40,6 +40,18 @@ function initials(first: string, last: string): string {
   return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase()
 }
 
+function StatCard({ label, value, unit }: { label: string; value?: number; unit: string }) {
+  return (
+    <Card className="flex flex-col justify-between gap-1 p-6">
+      <Eyebrow>{label}</Eyebrow>
+      <p className="font-heading text-3xl tracking-tight">
+        {value ?? "—"}
+        {value ? <span className="ml-1 text-base text-muted-foreground">{unit}</span> : null}
+      </p>
+    </Card>
+  )
+}
+
 export function StudentDetail({ slug }: { slug: string }) {
   const [student, setStudent] = useState<Student | null>(null)
   const [loading, setLoading] = useState(true)
@@ -101,8 +113,8 @@ export function StudentDetail({ slug }: { slug: string }) {
         </Button>
       </ModuleHeader>
 
-      <div className="mx-auto grid max-w-3xl gap-4">
-        <Card className="p-6 sm:p-8">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card className="p-6 sm:p-8 md:col-span-2 md:row-span-2">
           <div className="flex items-start gap-4">
             <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-foreground/5 font-heading text-lg text-foreground ring-1 ring-border ring-inset">
               {initials(s.firstName, s.lastName)}
@@ -124,12 +136,6 @@ export function StudentDetail({ slug }: { slug: string }) {
             )}
           </div>
 
-          {/* Firma: la escalera de rango (obi). */}
-          <div className="mt-7 rounded-2xl bg-muted/40 p-5 ring-1 ring-border ring-inset">
-            <Eyebrow>Grado</Eyebrow>
-            <BeltProgress belt={s.belt} className="mt-3" />
-          </div>
-
           <Separator className="my-7" />
 
           <dl className="grid gap-6 sm:grid-cols-2">
@@ -140,7 +146,15 @@ export function StudentDetail({ slug }: { slug: string }) {
           </dl>
         </Card>
 
-        <Card className="p-6 sm:p-8">
+        <Card className="p-6 sm:p-8 md:col-span-2">
+          <Eyebrow>Grado</Eyebrow>
+          <BeltProgress belt={s.belt} className="mt-3" />
+        </Card>
+
+        <StatCard label="Altura" value={s.height} unit="cm" />
+        <StatCard label="Peso" value={s.weight} unit="kg" />
+
+        <Card className="p-6 sm:p-8 md:col-span-4">
           <Eyebrow>Contenido habilitado</Eyebrow>
           {s.enabledContent.length === 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">

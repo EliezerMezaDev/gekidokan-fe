@@ -53,7 +53,7 @@ export default async function LandingPage() {
             cada paso del camino.
           </p>
           <div className="inline-flex items-center gap-4 rounded-[10px] bg-foreground py-3.5 pr-3.5 pl-6 shadow-[6px_6px_0_var(--primary)]">
-            <span className="text-[14.5px] font-medium text-white">
+            <span className="text-[14.5px] font-medium text-background">
               Lorem ipsum dolor sit amet consectetur adipisicing.
             </span>
             <Link
@@ -120,7 +120,7 @@ export default async function LandingPage() {
           {programs.map((p) => (
             <div
               key={p.title}
-              className="flex flex-col overflow-hidden rounded-xl border border-line bg-white"
+              className="flex flex-col overflow-hidden rounded-xl border border-line bg-card"
             >
               <PhotoPlaceholder label={p.img} className="aspect-16/10 p-3" />
               <div className="p-[22px]">
@@ -142,7 +142,7 @@ export default async function LandingPage() {
 
       {/* PRÓXIMO EVENTO */}
       <section className="mx-auto flex min-h-[30dvh] max-w-[1180px] flex-col justify-center px-8 py-6.5">
-        <div className="grid items-center gap-[34px] rounded-[14px] border-[1.5px] border-line-strong bg-white px-[38px] py-[34px] md:grid-cols-[1.3fr_auto_auto]">
+        <div className="grid items-center gap-[34px] rounded-[14px] border-[1.5px] border-line-strong bg-card px-[38px] py-[34px] md:grid-cols-[1.3fr_auto_auto]">
           <div>
             <p className="disp mb-2.5 text-[15px] font-semibold">
               Próximo evento

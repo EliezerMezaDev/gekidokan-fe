@@ -38,19 +38,21 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* portal publico */
+  /* portal publico: una sola fuente de color, derivada de los tokens shadcn de arriba */
   --primary-strong: #c11119;
-  --ink: #3a3333;
-  --ink-muted: #6b6363;
+  --ink: var(--foreground);
+  --ink-muted: var(--muted-foreground);
   --ink-subtle: #9a9090;
   --ink-hint: #c3b9b9;
   --ink-inverse: #c9c0c0;
-  --line: #ece3e3;
-  --line-soft: #f0e8e8;
-  --line-strong: #dfd4d4;
+  --line: var(--border);
+  --line-soft: color-mix(in oklch, var(--border) 50%, transparent);
+  --line-strong: color-mix(in oklch, var(--border) 100%, var(--foreground) 20%);
   --line-inverse: #4a4040;
   --stripe-a: #efe7e7;
   --stripe-b: #e7dede;
+  /* ponytail: dojo-stripe/map-* no tienen consumidores todavía, solo se
+     mantienen los valores dark por paridad con el resto del bloque */
   --dojo-stripe-a: #262020;
   --dojo-stripe-b: #211b1b;
   --map-bg: #2a2626;
@@ -89,6 +91,17 @@
   --sidebar-accent-foreground: #f7f1f1;
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: #eb1c24;
+
+  /* portal publico: variantes oscuras de las vars decorativas sin token shadcn equivalente */
+  --primary-strong: #ff5b62;
+  --ink-subtle: #a89e9e;
+  --ink-hint: #5c5252;
+  --stripe-a: #2b2626;
+  --stripe-b: #241f1f;
+  --dojo-stripe-a: #efe7e7;
+  --dojo-stripe-b: #e7dede;
+  --map-bg: #f0e8e8;
+  --map-grid: #ece2e2;
 }
 
 @theme inline {
@@ -148,6 +161,10 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+
+    &::-webkit-scrollbar {
+      @apply w-0;
+    }
   }
   body {
     @apply bg-background text-foreground;
@@ -161,11 +178,6 @@
   }
 }
 
-.portal {
-  --background: #f7f1f1;
-  --foreground: #1c1717;
-  --card: #ffffff;
-}
 .disp {
   font-family: var(--font-heading);
   text-transform: uppercase;

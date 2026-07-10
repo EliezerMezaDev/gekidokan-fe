@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Controller, type UseFormReturn } from "react-hook-form"
 import type { StudentInput } from "@/shared/schemas/students"
 import { beltRankSchema } from "@/shared/schemas/students"
@@ -65,6 +66,30 @@ export function BasicFields({ form }: Props) {
           {...register("guardianName")}
         />
       </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="height">Altura (cm)</Label>
+        <Input
+          id="height"
+          type="number"
+          placeholder="opcional"
+          {...register("height", {
+            setValueAs: (v) => (v === "" ? undefined : Number(v)),
+          })}
+        />
+        <FieldError message={errors.height?.message} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="weight">Peso (kg)</Label>
+        <Input
+          id="weight"
+          type="number"
+          placeholder="opcional"
+          {...register("weight", {
+            setValueAs: (v) => (v === "" ? undefined : Number(v)),
+          })}
+        />
+        <FieldError message={errors.weight?.message} />
+      </div>
     </div>
   )
 }
@@ -118,33 +143,46 @@ export function AcademicFields({ form }: Props) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <Label>Contenido programático habilitado</Label>
         {/* ponytail: catálogo mock; el acceso real por cinta llega con DT-05. */}
         <Controller
           control={control}
           name="enabledContent"
           render={({ field }) => (
-            <div className="grid gap-2 sm:grid-cols-2">
-              {mockContent.map((c) => {
-                const checked = field.value.includes(c.id)
+            <div className="flex flex-col gap-4">
+              {beltRankSchema.options.map((belt) => {
+                const items = mockContent.filter((c) => c.belt === belt)
+                if (items.length === 0) return null
                 return (
-                  <label
-                    key={c.id}
-                    className="flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 text-sm"
-                  >
-                    <Checkbox
-                      checked={checked}
-                      onCheckedChange={(on) =>
-                        field.onChange(
-                          on
-                            ? [...field.value, c.id]
-                            : field.value.filter((id) => id !== c.id)
+                  <div key={belt} className="flex flex-col gap-2">
+                    <p className="disp text-[10px] text-muted-foreground">
+                      {beltLabel[belt]}
+                    </p>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {items.map((c) => {
+                        const checked = field.value.includes(c.id)
+                        return (
+                          <label
+                            key={c.id}
+                            className="flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 text-sm"
+                          >
+                            <Checkbox
+                              checked={checked}
+                              onCheckedChange={(on) =>
+                                field.onChange(
+                                  on
+                                    ? [...field.value, c.id]
+                                    : field.value.filter((id) => id !== c.id)
+                                )
+                              }
+                            />
+                            {c.label}
+                          </label>
                         )
-                      }
-                    />
-                    {c.label}
-                  </label>
+                      })}
+                    </div>
+                  </div>
                 )
               })}
             </div>
@@ -157,11 +195,19 @@ export function AcademicFields({ form }: Props) {
   )
 }
 
-export function AccessFields({ form }: Props) {
+export function AccessFields({
+  form,
+  readOnlyAccess = false,
+}: Props & { readOnlyAccess?: boolean }) {
   const {
     register,
+    getValues,
     formState: { errors },
   } = form
+  // ponytail: "deshabilitar acceso" es un control mock (no hay campo en el
+  // schema aún); solo estado local hasta que el backend lo soporte.
+  const [accessDisabled, setAccessDisabled] = useState(false)
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
@@ -171,13 +217,26 @@ export function AccessFields({ form }: Props) {
           type="email"
           placeholder="alumno@correo.com"
           autoComplete="off"
+          readOnly={readOnlyAccess}
+          disabled={readOnlyAccess}
           {...register("accessUsername")}
         />
         <FieldError message={errors.accessUsername?.message} />
         <p className="text-xs text-muted-foreground">
-          Con este correo el alumno ingresará a su área personal.
+          {readOnlyAccess
+            ? "El correo de acceso no se edita aquí; usa el toggle para deshabilitarlo."
+            : "Con este correo el alumno ingresará a su área personal."}
         </p>
       </div>
+      {readOnlyAccess ? (
+        <label className="flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 text-sm">
+          <Checkbox
+            checked={accessDisabled}
+            onCheckedChange={(on) => setAccessDisabled(on === true)}
+          />
+          Deshabilitar acceso del alumno ({getValues("accessUsername")})
+        </label>
+      ) : null}
     </div>
   )
 }

@@ -40,6 +40,8 @@ function toInput(s: Student): StudentInput {
     email: s.email ?? "",
     phone: s.phone ?? "",
     guardianName: s.guardianName ?? "",
+    height: s.height,
+    weight: s.weight,
     enabledContent: s.enabledContent,
     accessUsername: s.accessUsername ?? "",
   }
@@ -117,43 +119,39 @@ export function StudentEditForm({ slug }: { slug: string }) {
         </Button>
       </ModuleHeader>
 
-      <Card className="mx-auto max-w-2xl p-6">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          noValidate
-          className="flex flex-col gap-6"
-        >
-          <section className="flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          <Card className="flex flex-col gap-4 p-6 md:col-span-2">
             <h2 className="disp text-[11px] text-muted-foreground">
               Datos básicos
             </h2>
             <BasicFields form={form} />
-          </section>
-          <Separator />
-          <section className="flex flex-col gap-4">
+          </Card>
+          <Card className="flex flex-col gap-4 p-6 md:col-span-2">
             <h2 className="disp text-[11px] text-muted-foreground">
               Datos académicos
             </h2>
             <AcademicFields form={form} />
-          </section>
-          <Separator />
-          <section className="flex flex-col gap-4">
+          </Card>
+          <Card className="flex flex-col gap-4 p-6 md:col-span-4">
             <h2 className="disp text-[11px] text-muted-foreground">
               Datos de acceso
             </h2>
-            <AccessFields form={form} />
-          </section>
+            <AccessFields form={form} readOnlyAccess />
+          </Card>
+        </div>
 
-          <div className="flex justify-end gap-2">
-            <Button variant="ghost" asChild>
-              <Link href={`/d/students/${student.slug}`}>Cancelar</Link>
-            </Button>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Guardando…" : "Guardar cambios"}
-            </Button>
-          </div>
-        </form>
-      </Card>
+        <Separator className="my-6" />
+
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" asChild>
+            <Link href={`/d/students/${student.slug}`}>Cancelar</Link>
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Guardando…" : "Guardar cambios"}
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }
