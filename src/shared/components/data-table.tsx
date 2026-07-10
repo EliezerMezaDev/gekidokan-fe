@@ -1,0 +1,487 @@
+"use client"
+
+import type { ReactNode } from "react"
+import * as React from "react"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type Column as TColumn,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+} from "@tanstack/react-table"
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconChevronsLeft,
+  IconChevronsRight,
+  IconDotsVertical,
+  IconDownload,
+  IconLayoutColumns,
+  IconSelector,
+  IconSearch,
+} from "@tabler/icons-react"
+
+import { cn } from "@/shared/lib/utils"
+import { Button } from "@/shadcn/button"
+import { Checkbox } from "@/shadcn/checkbox"
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/shadcn/context-menu"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shadcn/dropdown-menu"
+import { Input } from "@/shadcn/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shadcn/select"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shadcn/table"
+import { TableSkeleton, EmptyState, ErrorState } from "./states"
+
+// Forma general de los módulos basados en tabla del dashboard (ver referencia
+// apex-dashboard). Cada módulo declara sus `columns` (ColumnDef de TanStack) y
+// pasa los datos ya cargados; este componente aporta selección, orden,
+// visibilidad de columnas, búsqueda, exportación CSV, acciones por fila (menú
+// ⋯ + clic derecho), paginación y los estados loading/error/empty de forma
+// uniforme. Ningún módulo reimplementa esa maqueta.
+
+// Cabecera de columna ordenable con flecha. Úsala en el `header` de un ColumnDef.
+export function SortableHeader<T>({
+  column,
+  children,
+  className,
+}: {
+  column: TColumn<T, unknown>
+  children: ReactNode
+  className?: string
+}) {
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className={cn("-ml-2 h-8 data-[state=open]:bg-accent", className)}
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      {children}
+      <IconSelector className="size-3.5 text-muted-foreground" />
+    </Button>
+  )
+}
+
+// Columna de selección lista para anteponer a tus columnas cuando quieras
+// checkboxes por fila (como en la referencia).
+export function selectionColumn<T>(): ColumnDef<T> {
+  return {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+        aria-label="Seleccionar todo"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(v) => row.toggleSelected(!!v)}
+        aria-label="Seleccionar fila"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  }
+}
+
+// Acción de fila; se renderiza igual en el menú ⋯ y en el clic derecho.
+export type RowAction<T> = {
+  label: string
+  onSelect: (row: T) => void
+  destructive?: boolean
+  separatorBefore?: boolean
+}
+
+export type { ColumnDef }
+
+function csvCell(value: unknown): string {
+  const s = value == null ? "" : String(value)
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+}
+
+export function DataTable<T>({
+  columns,
+  data,
+  getRowId,
+  loading,
+  error,
+  onRetry,
+  searchColumn,
+  searchPlaceholder = "Buscar…",
+  toolbarStart,
+  toolbarEnd,
+  rowActions,
+  exportable = false,
+  exportFileName = "export",
+  onRowClick,
+  emptyTitle = "Sin resultados",
+  emptyDescription,
+  emptyAction,
+  pageSize = 10,
+}: {
+  columns: ColumnDef<T>[]
+  data: T[]
+  getRowId?: (row: T) => string
+  loading?: boolean
+  error?: string | null
+  onRetry?: () => void
+  // id de la columna sobre la que filtra el buscador; omítelo para ocultarlo.
+  searchColumn?: string
+  searchPlaceholder?: string
+  // fila 1 del toolbar (filtros/tabs).
+  toolbarStart?: ReactNode
+  // acciones extra a la derecha, junto a Exportar/Columnas.
+  toolbarEnd?: ReactNode
+  // acciones por fila: si se provee, se agrega la columna ⋯ y el clic derecho.
+  rowActions?: (row: T) => RowAction<T>[]
+  exportable?: boolean
+  exportFileName?: string
+  onRowClick?: (row: T) => void
+  emptyTitle?: string
+  emptyDescription?: string
+  emptyAction?: ReactNode
+  pageSize?: number
+}) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
+  // Columna de acciones (⋯) autogenerada cuando hay rowActions.
+  const allColumns = React.useMemo<ColumnDef<T>[]>(() => {
+    if (!rowActions) return columns
+    const actionsCol: ColumnDef<T> = {
+      id: "actions",
+      header: () => null,
+      cell: ({ row }) => (
+        <div className="text-right">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-8 text-muted-foreground"
+                aria-label="Acciones"
+              >
+                <IconDotsVertical className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-36">
+              {rowActions(row.original).map((a, i) => (
+                <React.Fragment key={a.label}>
+                  {a.separatorBefore && i > 0 ? (
+                    <DropdownMenuSeparator />
+                  ) : null}
+                  <DropdownMenuItem
+                    variant={a.destructive ? "destructive" : "default"}
+                    onClick={() => a.onSelect(row.original)}
+                  >
+                    {a.label}
+                  </DropdownMenuItem>
+                </React.Fragment>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    }
+    return [...columns, actionsCol]
+  }, [columns, rowActions])
+
+  const table = useReactTable({
+    data,
+    columns: allColumns,
+    state: { sorting, columnFilters, columnVisibility, rowSelection },
+    getRowId: getRowId ? (row) => getRowId(row) : undefined,
+    initialState: { pagination: { pageSize } },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  })
+
+  const searchCol = searchColumn ? table.getColumn(searchColumn) : undefined
+
+  // Exporta a CSV las filas filtradas usando solo columnas con accessor.
+  // ponytail: cabeceras = id de columna; añadir meta.exportHeader si hace falta.
+  function exportCsv() {
+    const cols = table
+      .getVisibleLeafColumns()
+      .filter((c) => typeof c.accessorFn === "function")
+    const header = cols.map((c) => c.id)
+    const body = table
+      .getFilteredRowModel()
+      .rows.map((r) => cols.map((c) => r.getValue(c.id)))
+    const csv = [header, ...body]
+      .map((cells) => cells.map(csvCell).join(","))
+      .join("\n")
+    const url = URL.createObjectURL(
+      new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    )
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${exportFileName}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const toolbar = (
+    <div className="flex flex-col gap-3">
+      {toolbarStart}
+      <div className="flex flex-wrap items-center gap-2">
+        {searchCol ? (
+          <div className="relative">
+            <IconSearch className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={(searchCol.getFilterValue() as string) ?? ""}
+              onChange={(e) => searchCol.setFilterValue(e.target.value)}
+              placeholder={searchPlaceholder}
+              className="w-56 pl-8"
+            />
+          </div>
+        ) : null}
+        <div className="ml-auto flex items-center gap-2">
+          {toolbarEnd}
+          {exportable ? (
+            <Button variant="outline" size="sm" onClick={exportCsv}>
+              <IconDownload className="size-4" />
+              <span className="hidden sm:inline">Exportar</span>
+            </Button>
+          ) : null}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <IconLayoutColumns className="size-4" />
+                <span className="hidden sm:inline">Columnas</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              {table
+                .getAllColumns()
+                .filter((c) => c.getCanHide())
+                .map((c) => (
+                  <DropdownMenuCheckboxItem
+                    key={c.id}
+                    className="capitalize"
+                    checked={c.getIsVisible()}
+                    onCheckedChange={(v) => c.toggleVisibility(!!v)}
+                  >
+                    {c.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </div>
+  )
+
+  if (loading)
+    return <TableSkeleton columns={allColumns.length} rows={pageSize} />
+  if (error) return <ErrorState message={error} onRetry={onRetry} />
+
+  const rows = table.getRowModel().rows
+
+  return (
+    <div className="flex flex-col gap-4">
+      {toolbar}
+
+      <div className="rounded-lg border">
+        <Table>
+          <TableHeader className="bg-muted">
+            {table.getHeaderGroups().map((hg) => (
+              <TableRow key={hg.id}>
+                {hg.headers.map((h) => (
+                  <TableHead key={h.id} colSpan={h.colSpan}>
+                    {h.isPlaceholder
+                      ? null
+                      : flexRender(h.column.columnDef.header, h.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody className="bg-muted">
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={allColumns.length} className="p-0">
+                  <EmptyState
+                    title={emptyTitle}
+                    description={emptyDescription}
+                    action={emptyAction}
+                  />
+                </TableCell>
+              </TableRow>
+            ) : (
+              rows.map((row) => {
+                const tableRow = (
+                  <TableRow
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={
+                      onRowClick ? () => onRowClick(row.original) : undefined
+                    }
+                    className={onRowClick ? "cursor-pointer" : undefined}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )
+
+                if (!rowActions)
+                  return (
+                    <React.Fragment key={row.id}>{tableRow}</React.Fragment>
+                  )
+
+                return (
+                  <ContextMenu key={row.id}>
+                    <ContextMenuTrigger asChild>{tableRow}</ContextMenuTrigger>
+                    <ContextMenuContent className="w-36">
+                      {rowActions(row.original).map((a, i) => (
+                        <React.Fragment key={a.label}>
+                          {a.separatorBefore && i > 0 ? (
+                            <ContextMenuSeparator />
+                          ) : null}
+                          <ContextMenuItem
+                            variant={a.destructive ? "destructive" : "default"}
+                            onSelect={() => a.onSelect(row.original)}
+                          >
+                            {a.label}
+                          </ContextMenuItem>
+                        </React.Fragment>
+                      ))}
+                    </ContextMenuContent>
+                  </ContextMenu>
+                )
+              })
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-4 px-1">
+        <div className="text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length > 0
+            ? `${table.getFilteredSelectedRowModel().rows.length} de ${table.getFilteredRowModel().rows.length} fila(s) seleccionadas.`
+            : `${table.getFilteredRowModel().rows.length} resultado(s).`}
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Filas</span>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(v) => table.setPageSize(Number(v))}
+            >
+              <SelectTrigger size="sm" className="w-16">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[10, 20, 30, 50].map((n) => (
+                  <SelectItem key={n} value={`${n}`}>
+                    {n}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <span className="text-sm text-muted-foreground">
+            Página {table.getState().pagination.pageIndex + 1} de{" "}
+            {table.getPageCount() || 1}
+          </span>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+              aria-label="Primera página"
+            >
+              <IconChevronsLeft className="size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              aria-label="Anterior"
+            >
+              <IconChevronLeft className="size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              aria-label="Siguiente"
+            >
+              <IconChevronRight className="size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="size-8"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+              aria-label="Última página"
+            >
+              <IconChevronsRight className="size-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
