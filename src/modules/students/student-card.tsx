@@ -14,7 +14,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/dropdown-menu"
+import { relationshipLabel } from "@/modules/guardians/relationship"
 import { beltLabel, beltDot, dateFmt } from "./belt"
+
+// Texto de contacto: representante (+ relación si existe) o el email de fallback.
+function contactLine(s: Student): string {
+  if (!s.guardianName) return s.email ?? "—"
+  const rel = s.guardianRelationship
+    ? ` (${relationshipLabel[s.guardianRelationship]})`
+    : ""
+  return `Rep.${rel}: ${s.guardianName}`
+}
 
 // Tarjeta de alumno para la vista de grilla (dedicada). Mismos datos que una
 // fila de la tabla, con el mismo menú de acciones (⋯) para mantener paridad.
@@ -37,7 +47,7 @@ export function StudentCard({
             {s.firstName} {s.lastName}
           </p>
           <p className="truncate text-xs text-muted-foreground">
-            {s.guardianName ? `Rep.: ${s.guardianName}` : (s.email ?? "—")}
+            {contactLine(s)}
           </p>
         </div>
         <DropdownMenu>

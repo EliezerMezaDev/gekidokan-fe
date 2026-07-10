@@ -2,6 +2,7 @@ import {
   type Icon,
   IconLayoutDashboard,
   IconUsers,
+  IconUsersGroup,
   IconCalendarEvent,
   IconReceipt2,
   IconBook,
@@ -15,6 +16,7 @@ export type NavItem = { href: string; label: string; icon: Icon }
 export const dashboardNav: NavItem[] = [
   { href: "/d", label: "Inicio", icon: IconLayoutDashboard },
   { href: "/d/students", label: "Alumnos", icon: IconUsers },
+  { href: "/d/guardians", label: "Representantes", icon: IconUsersGroup },
   { href: "/d/classes", label: "Clases", icon: IconCalendarEvent },
   { href: "/d/billing/invoices", label: "Facturación", icon: IconReceipt2 },
   { href: "/d/content", label: "Contenido", icon: IconBook },

@@ -1,9 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { Controller, type UseFormReturn } from "react-hook-form"
+import { useEffect, useState } from "react"
+import { Controller, useWatch, type UseFormReturn } from "react-hook-form"
 import type { StudentInput } from "@/shared/schemas/students"
 import { beltRankSchema } from "@/shared/schemas/students"
+import { relationshipTypeSchema, type Guardian } from "@/shared/schemas/guardians"
+import { isMinor } from "@/shared/lib/age"
+import { getGuardians } from "@/modules/guardians/api"
+import { relationshipLabel } from "@/modules/guardians/relationship"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
 import { Checkbox } from "@/shadcn/checkbox"
@@ -30,8 +34,23 @@ function FieldError({ message }: { message?: string }) {
 export function BasicFields({ form }: Props) {
   const {
     register,
+    control,
+    setValue,
     formState: { errors },
   } = form
+  const birthDate = useWatch({ control, name: "birthDate" })
+  const minor = isMinor(birthDate)
+
+  const [guardians, setGuardians] = useState<Guardian[]>([])
+  const [loadingGuardians, setLoadingGuardians] = useState(false)
+  useEffect(() => {
+    if (!minor) return
+    setLoadingGuardians(true)
+    getGuardians()
+      .then(setGuardians)
+      .finally(() => setLoadingGuardians(false))
+  }, [minor])
+
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-2">
@@ -58,13 +77,10 @@ export function BasicFields({ form }: Props) {
         <Label htmlFor="phone">Teléfono</Label>
         <Input id="phone" placeholder="opcional" {...register("phone")} />
       </div>
-      <div className="flex flex-col gap-2 sm:col-span-2">
-        <Label htmlFor="guardianName">Representante</Label>
-        <Input
-          id="guardianName"
-          placeholder="opcional (menores de edad)"
-          {...register("guardianName")}
-        />
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="birthDate">Fecha de nacimiento</Label>
+        <Input id="birthDate" type="date" {...register("birthDate")} />
+        <FieldError message={errors.birthDate?.message} />
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="height">Altura (cm)</Label>
@@ -90,6 +106,72 @@ export function BasicFields({ form }: Props) {
         />
         <FieldError message={errors.weight?.message} />
       </div>
+
+      {minor ? (
+        <div className="flex flex-col gap-4 sm:col-span-2 sm:grid sm:grid-cols-2 sm:gap-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="guardianId">Representante</Label>
+            <Controller
+              control={control}
+              name="guardianId"
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={(id) => {
+                    field.onChange(id)
+                    // ponytail: snapshot de display para evitar fetch en tablas.
+                    const g = guardians.find((g) => g.id === id)
+                    setValue(
+                      "guardianName",
+                      g ? `${g.firstName} ${g.lastName}` : ""
+                    )
+                  }}
+                >
+                  <SelectTrigger id="guardianId" className="w-full">
+                    <SelectValue
+                      placeholder={
+                        loadingGuardians
+                          ? "Cargando…"
+                          : "Selecciona un representante"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {guardians.map((g) => (
+                      <SelectItem key={g.id} value={g.id}>
+                        {g.firstName} {g.lastName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FieldError message={errors.guardianId?.message} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="guardianRelationship">Relación</Label>
+            <Controller
+              control={control}
+              name="guardianRelationship"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="guardianRelationship" className="w-full">
+                    <SelectValue placeholder="Selecciona la relación" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {relationshipTypeSchema.options.map((r) => (
+                      <SelectItem key={r} value={r}>
+                        {relationshipLabel[r]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FieldError message={errors.guardianRelationship?.message} />
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

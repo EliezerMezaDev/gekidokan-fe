@@ -9,7 +9,17 @@ import {
   type RowAction,
 } from "@/shared/components/data-table"
 import { Badge } from "@/shadcn/badge"
+import { relationshipLabel } from "@/modules/guardians/relationship"
 import { beltLabel, beltDot, dateFmt } from "./belt"
+
+// Texto de contacto: representante (+ relación si existe) o el email de fallback.
+function contactLine(s: Student): string {
+  if (!s.guardianName) return s.email ?? "—"
+  const rel = s.guardianRelationship
+    ? ` (${relationshipLabel[s.guardianRelationship]})`
+    : ""
+  return `Rep.${rel}: ${s.guardianName}`
+}
 
 // Columnas de la tabla de alumnos (dedicadas). La maqueta genérica (selección,
 // orden, acciones, paginación) la aporta DataTable; aquí solo se declara cómo
@@ -35,7 +45,7 @@ export const studentColumns: ColumnDef<Student>[] = [
               {s.firstName} {s.lastName}
             </p>
             <p className="truncate text-xs text-muted-foreground">
-              {s.guardianName ? `Rep.: ${s.guardianName}` : (s.email ?? "—")}
+              {contactLine(s)}
             </p>
           </div>
         </div>

@@ -27,7 +27,17 @@ import {
 // numerado porque los pasos son una secuencia real.
 
 const steps = [
-  { label: "Datos básicos", fields: ["firstName", "lastName", "email"] },
+  {
+    label: "Datos básicos",
+    fields: [
+      "firstName",
+      "lastName",
+      "email",
+      "birthDate",
+      "guardianId",
+      "guardianRelationship",
+    ],
+  },
   { label: "Datos académicos", fields: ["belt", "status", "enabledContent"] },
   { label: "Datos de acceso", fields: ["accessUsername"] },
 ] as const
@@ -97,6 +107,9 @@ export function StudentWizard() {
       status: "ACTIVE",
       email: "",
       phone: "",
+      birthDate: "",
+      guardianId: undefined,
+      guardianRelationship: undefined,
       guardianName: "",
       enabledContent: [],
       accessUsername: "",

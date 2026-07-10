@@ -14,6 +14,8 @@ import { Card } from "@/shadcn/card"
 import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
 import { Separator } from "@/shadcn/separator"
+import { relationshipLabel } from "@/modules/guardians/relationship"
+import { calcAge } from "@/shared/lib/age"
 import { getStudentBySlug } from "./api"
 import { dateFmt } from "./belt"
 import { BeltProgress } from "./belt-progress"
@@ -141,7 +143,18 @@ export function StudentDetail({ slug }: { slug: string }) {
           <dl className="grid gap-6 sm:grid-cols-2">
             <Field label="Correo de contacto" value={s.email ?? "—"} />
             <Field label="Teléfono" value={s.phone ?? "—"} />
-            <Field label="Representante" value={s.guardianName ?? "—"} />
+            <Field
+              label="Fecha de nacimiento"
+              value={`${dateFmt.format(new Date(s.birthDate))} (${calcAge(s.birthDate)} años)`}
+            />
+            <Field
+              label="Representante"
+              value={
+                s.guardianName
+                  ? `${s.guardianName}${s.guardianRelationship ? ` (${relationshipLabel[s.guardianRelationship]})` : ""}`
+                  : "—"
+              }
+            />
             <Field label="Correo de acceso" value={s.accessUsername ?? "—"} />
           </dl>
         </Card>
