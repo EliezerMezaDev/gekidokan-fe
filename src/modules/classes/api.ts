@@ -25,7 +25,9 @@ export async function getClasses(): Promise<KarateClass[]> {
   return classSchema.array().parse(await api.get("/classes"))
 }
 
-export async function getClassBySlug(slug: string): Promise<KarateClass | null> {
+export async function getClassBySlug(
+  slug: string
+): Promise<KarateClass | null> {
   if (USE_MOCKS) {
     await delay()
     return mockClasses.find((c) => c.slug === slug) ?? null
@@ -86,7 +88,9 @@ export async function saveAttendance(
 ): Promise<void> {
   if (USE_MOCKS) {
     await delay()
-    toast.success(`Asistencia guardada para ${date} (${records.length} alumnos)`)
+    toast.success(
+      `Asistencia guardada para ${date} (${records.length} alumnos)`
+    )
     return
   }
   await api.post(`/classes/${classId}/attendance`, { date, records })

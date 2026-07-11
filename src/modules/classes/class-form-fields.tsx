@@ -1,11 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import {
-  Controller,
-  useFieldArray,
-  type UseFormReturn,
-} from "react-hook-form"
+import { Controller, useFieldArray, type UseFormReturn } from "react-hook-form"
 import { IconPlus, IconTrash } from "@tabler/icons-react"
 import type { ClassInput } from "@/shared/schemas/classes"
 import { classStyleSchema, dayOfWeekSchema } from "@/shared/schemas/classes"
@@ -91,8 +87,14 @@ export function ClassBasicFields({ form }: Props) {
 // Editor de horarios: filas add/remove con Select de día + inputs nativos de
 // hora. ponytail: <input type="time"> nativo en vez de un time-picker propio.
 export function ClassScheduleFields({ form }: Props) {
-  const { control, formState: { errors } } = form
-  const { fields, append, remove } = useFieldArray({ control, name: "schedules" })
+  const {
+    control,
+    formState: { errors },
+  } = form
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "schedules",
+  })
 
   return (
     <div className="flex flex-col gap-3">

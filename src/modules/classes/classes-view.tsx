@@ -85,7 +85,11 @@ export function ClassesView() {
   const actions = classRowActions(router)
   const tab = filters.style ?? "all"
   const setTab = (value: string) =>
-    apply(value === "all" ? { ...filters, style: undefined } : { ...filters, style: value })
+    apply(
+      value === "all"
+        ? { ...filters, style: undefined }
+        : { ...filters, style: value }
+    )
 
   return (
     <div>

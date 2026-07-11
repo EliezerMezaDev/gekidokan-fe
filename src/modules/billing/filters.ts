@@ -42,8 +42,7 @@ export function applyInvoiceFilters(
   return invoices.filter((i) => {
     if (filters.student && !matchesText(i.studentName, filters.student))
       return false
-    if (filters.period && !matchesText(i.period, filters.period))
-      return false
+    if (filters.period && !matchesText(i.period, filters.period)) return false
     if (filters.status && i.status !== filters.status) return false
     return true
   })

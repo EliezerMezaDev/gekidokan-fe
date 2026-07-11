@@ -73,7 +73,9 @@ export function GuardianCard({
 
       <div className="flex items-center justify-between border-t px-4 pt-3 text-xs text-muted-foreground">
         <span className="truncate">{g.phone ?? g.email ?? "—"}</span>
-        <span className="shrink-0">{dateFmt.format(new Date(g.createdAt))}</span>
+        <span className="shrink-0">
+          {dateFmt.format(new Date(g.createdAt))}
+        </span>
       </div>
     </Card>
   )

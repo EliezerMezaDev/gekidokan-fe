@@ -77,7 +77,8 @@ export const guardianRowActions = (
   {
     // ponytail: eliminar es placeholder (fuera de alcance); avisa sin mutar.
     label: "Eliminar",
-    onSelect: () => toast.info("Eliminar representante aún no está disponible."),
+    onSelect: () =>
+      toast.info("Eliminar representante aún no está disponible."),
     destructive: true,
     separatorBefore: true,
   },

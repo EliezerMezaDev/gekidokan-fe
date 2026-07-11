@@ -34,9 +34,7 @@ export function InvoiceCard({
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium">{i.studentName}</p>
-          <p className="truncate text-xs text-muted-foreground">
-            {i.period}
-          </p>
+          <p className="truncate text-xs text-muted-foreground">{i.period}</p>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -52,7 +50,9 @@ export function InvoiceCard({
           <DropdownMenuContent align="end" className="w-36">
             {actions.map((a, idx) => (
               <Fragment key={a.label}>
-                {a.separatorBefore && idx > 0 ? <DropdownMenuSeparator /> : null}
+                {a.separatorBefore && idx > 0 ? (
+                  <DropdownMenuSeparator />
+                ) : null}
                 <DropdownMenuItem
                   variant={a.destructive ? "destructive" : "default"}
                   onClick={() => a.onSelect(i)}
@@ -66,7 +66,9 @@ export function InvoiceCard({
       </div>
 
       <div className="flex items-center justify-between px-4">
-        <span className="text-sm font-medium">{usdFmt.format(i.amountUsd)}</span>
+        <span className="text-sm font-medium">
+          {usdFmt.format(i.amountUsd)}
+        </span>
         <InvoiceStatusBadge status={i.status} />
       </div>
 

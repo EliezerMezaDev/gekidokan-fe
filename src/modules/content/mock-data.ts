@@ -2,10 +2,14 @@ import type { SyllabusItem } from "@/shared/schemas/content"
 
 // Mock propio del módulo de contenido (no es el mismo mock que
 // modules/students/content-mock.ts, que sirve al selector de alumnos).
+// Los prerequisites forman un DAG por cinta para ejercitar el árbol de
+// progresión (varios ítems por fila y saltos de más de un nivel).
 
 export const mockSyllabusItems: SyllabusItem[] = [
+  // ── BLANCO ────────────────────────────────────────────────────────────
   {
     id: "syl-1",
+    prerequisites: [],
     slug: "kata-heian-shodan",
     type: "KATA",
     title: "Heian Shodan",
@@ -17,6 +21,7 @@ export const mockSyllabusItems: SyllabusItem[] = [
   },
   {
     id: "syl-2",
+    prerequisites: [],
     slug: "kihon-basico",
     type: "PROGRAM",
     title: "Kihon básico",
@@ -27,7 +32,21 @@ export const mockSyllabusItems: SyllabusItem[] = [
     createdAt: "2025-01-10T10:00:00.000Z",
   },
   {
+    id: "syl-9",
+    prerequisites: [],
+    slug: "kihon-zuki",
+    type: "PROGRAM",
+    title: "Kihon: Zuki (puños)",
+    bodyMarkdown: "Técnicas básicas de puño: oi-zuki, gyaku-zuki.",
+    videoUrl: "",
+    minBeltRank: "BLANCO",
+    style: "SHOTOKAN",
+    createdAt: "2025-01-12T10:00:00.000Z",
+  },
+  // ── AMARILLO ──────────────────────────────────────────────────────────
+  {
     id: "syl-3",
+    prerequisites: ["syl-1"],
     slug: "kata-heian-nidan",
     type: "KATA",
     title: "Heian Nidan",
@@ -39,17 +58,33 @@ export const mockSyllabusItems: SyllabusItem[] = [
   },
   {
     id: "syl-4",
+    prerequisites: ["syl-1"],
     slug: "bunkai-heian-shodan",
     type: "BUNKAI",
     title: "Bunkai: Heian Shodan",
-    bodyMarkdown: "Aplicación marcial de las primeras técnicas de Heian Shodan.",
+    bodyMarkdown:
+      "Aplicación marcial de las primeras técnicas de Heian Shodan.",
     videoUrl: "https://example.com/video/bunkai-heian-shodan",
     minBeltRank: "AMARILLO",
     style: "SHOTOKAN",
     createdAt: "2025-02-20T10:00:00.000Z",
   },
   {
+    id: "syl-10",
+    prerequisites: ["syl-2", "syl-9"],
+    slug: "kihon-keri",
+    type: "PROGRAM",
+    title: "Kihon: Keri (patadas)",
+    bodyMarkdown: "Patadas básicas: mae-geri, yoko-geri, mawashi-geri.",
+    videoUrl: "",
+    minBeltRank: "AMARILLO",
+    style: "SHOTOKAN",
+    createdAt: "2025-02-22T10:00:00.000Z",
+  },
+  // ── NARANJA ───────────────────────────────────────────────────────────
+  {
     id: "syl-5",
+    prerequisites: ["syl-2"],
     slug: "kumite-gohon",
     type: "PROGRAM",
     title: "Kumite: Gohon",
@@ -60,7 +95,33 @@ export const mockSyllabusItems: SyllabusItem[] = [
     createdAt: "2025-03-01T10:00:00.000Z",
   },
   {
+    id: "syl-11",
+    prerequisites: ["syl-3"],
+    slug: "bunkai-heian-nidan",
+    type: "BUNKAI",
+    title: "Bunkai: Heian Nidan",
+    bodyMarkdown: "Aplicación marcial de Heian Nidan.",
+    videoUrl: "",
+    minBeltRank: "NARANJA",
+    style: "SHOTOKAN",
+    createdAt: "2025-03-08T10:00:00.000Z",
+  },
+  {
+    id: "syl-12",
+    prerequisites: ["syl-10"],
+    slug: "kihon-combinaciones",
+    type: "PROGRAM",
+    title: "Kihon: Combinaciones",
+    bodyMarkdown: "Encadenamiento de puños y patadas en desplazamiento.",
+    videoUrl: "",
+    minBeltRank: "NARANJA",
+    style: "SHOTOKAN",
+    createdAt: "2025-03-12T10:00:00.000Z",
+  },
+  // ── VERDE ─────────────────────────────────────────────────────────────
+  {
     id: "syl-6",
+    prerequisites: ["syl-3"],
     slug: "kata-heian-sandan",
     type: "KATA",
     title: "Heian Sandan",
@@ -71,7 +132,45 @@ export const mockSyllabusItems: SyllabusItem[] = [
     createdAt: "2025-03-15T10:00:00.000Z",
   },
   {
+    id: "syl-13",
+    prerequisites: ["syl-5"],
+    slug: "kumite-sanbon",
+    type: "PROGRAM",
+    title: "Kumite: Sanbon",
+    bodyMarkdown: "Combate acordado de tres pasos.",
+    videoUrl: "",
+    minBeltRank: "VERDE",
+    style: "SHOTOKAN",
+    createdAt: "2025-03-20T10:00:00.000Z",
+  },
+  // ── AZUL ──────────────────────────────────────────────────────────────
+  {
+    id: "syl-14",
+    prerequisites: ["syl-6"],
+    slug: "kata-heian-yondan",
+    type: "KATA",
+    title: "Heian Yondan",
+    bodyMarkdown: "Cuarto kata de la serie Heian.",
+    videoUrl: "",
+    minBeltRank: "AZUL",
+    style: "SHOTOKAN",
+    createdAt: "2025-04-05T10:00:00.000Z",
+  },
+  {
+    id: "syl-15",
+    prerequisites: ["syl-6"],
+    slug: "bunkai-heian-sandan",
+    type: "BUNKAI",
+    title: "Bunkai: Heian Sandan",
+    bodyMarkdown: "Aplicación marcial de Heian Sandan.",
+    videoUrl: "",
+    minBeltRank: "AZUL",
+    style: "SHOTOKAN",
+    createdAt: "2025-04-08T10:00:00.000Z",
+  },
+  {
     id: "syl-7",
+    prerequisites: ["syl-12"],
     slug: "bo-kihon",
     type: "PROGRAM",
     title: "Bo: Kihon básico",
@@ -81,8 +180,23 @@ export const mockSyllabusItems: SyllabusItem[] = [
     style: "KOBUDO",
     createdAt: "2025-04-01T10:00:00.000Z",
   },
+  // ── MARRÓN ────────────────────────────────────────────────────────────
+  {
+    id: "syl-16",
+    prerequisites: ["syl-14"],
+    slug: "kata-heian-godan",
+    type: "KATA",
+    title: "Heian Godan",
+    bodyMarkdown: "Quinto y último kata de la serie Heian.",
+    videoUrl: "",
+    minBeltRank: "MARRON",
+    style: "SHOTOKAN",
+    createdAt: "2025-05-05T10:00:00.000Z",
+  },
   {
     id: "syl-8",
+    // Salto de VERDE a MARRÓN además del prereq de AZUL: dos niveles distintos.
+    prerequisites: ["syl-6", "syl-14"],
     slug: "kata-tekki-shodan",
     type: "KATA",
     title: "Tekki Shodan",
@@ -91,5 +205,43 @@ export const mockSyllabusItems: SyllabusItem[] = [
     minBeltRank: "MARRON",
     style: "SHOTOKAN",
     createdAt: "2025-05-10T10:00:00.000Z",
+  },
+  {
+    id: "syl-17",
+    prerequisites: ["syl-13"],
+    slug: "kumite-jiyu-ippon",
+    type: "PROGRAM",
+    title: "Kumite: Jiyu Ippon",
+    bodyMarkdown: "Combate acordado a un paso con distancia libre.",
+    videoUrl: "",
+    minBeltRank: "MARRON",
+    style: "SHOTOKAN",
+    createdAt: "2025-05-15T10:00:00.000Z",
+  },
+  // ── NEGRO ─────────────────────────────────────────────────────────────
+  {
+    id: "syl-18",
+    prerequisites: ["syl-8", "syl-16"],
+    slug: "kata-bassai-dai",
+    type: "KATA",
+    title: "Bassai Dai",
+    bodyMarkdown: "Kata superior de examen para 1er dan.",
+    videoUrl: "",
+    minBeltRank: "NEGRO",
+    style: "SHOTOKAN",
+    createdAt: "2025-06-01T10:00:00.000Z",
+  },
+  {
+    id: "syl-19",
+    // Salto largo desde BLANCO a NEGRO para ejercitar aristas multi-nivel.
+    prerequisites: ["syl-1", "syl-17"],
+    slug: "programa-examen-dan",
+    type: "PROGRAM",
+    title: "Programa de examen (1er Dan)",
+    bodyMarkdown: "Requisitos técnicos completos para el grado de cinta negra.",
+    videoUrl: "",
+    minBeltRank: "NEGRO",
+    style: "SHOTOKAN",
+    createdAt: "2025-06-10T10:00:00.000Z",
   },
 ]

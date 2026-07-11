@@ -41,7 +41,9 @@ export const schemeColumns: ColumnDef<TuitionScheme>[] = [
     accessorKey: "status",
     header: "Estado",
     cell: ({ row }) => (
-      <Badge variant={row.original.status === "APPROVED" ? undefined : "secondary"}>
+      <Badge
+        variant={row.original.status === "APPROVED" ? undefined : "secondary"}
+      >
         {tuitionStatusLabel[row.original.status]}
       </Badge>
     ),

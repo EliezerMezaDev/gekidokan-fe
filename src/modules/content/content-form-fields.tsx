@@ -6,9 +6,11 @@ import {
 } from "@/shared/schemas/content"
 import { beltRankSchema } from "@/shared/schemas/students"
 import { beltLabel } from "@/modules/students/belt"
+import { mockSyllabusItems } from "./mock-data"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
 import { Textarea } from "@/shadcn/textarea"
+import { Checkbox } from "@/shadcn/checkbox"
 import {
   Select,
   SelectContent,
@@ -27,8 +29,11 @@ function FieldError({ message }: { message?: string }) {
 
 export function ContentFormFields({
   form,
+  excludeId,
 }: {
   form: UseFormReturn<SyllabusItemInput>
+  // En edición, el propio ítem se excluye para no permitir autoreferencia.
+  excludeId?: string
 }) {
   const {
     register,
@@ -129,6 +134,61 @@ export function ContentFormFields({
           rows={8}
           placeholder="opcional"
           {...register("bodyMarkdown")}
+        />
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <Label>Prerrequisitos</Label>
+        <p className="text-sm text-muted-foreground">
+          Ítems que preceden a este en el árbol de progresión.
+        </p>
+        {/* ponytail: catálogo desde el mock; cambiar a fetch del backend cuando
+            exista /content. Mismo patrón de checkbox por cinta que alumnos. */}
+        <Controller
+          control={control}
+          name="prerequisites"
+          render={({ field }) => (
+            <div className="flex flex-col gap-4">
+              {beltRankSchema.options.map((belt) => {
+                const items = mockSyllabusItems.filter(
+                  (c) => c.minBeltRank === belt && c.id !== excludeId
+                )
+                if (items.length === 0) return null
+                return (
+                  <div key={belt} className="flex flex-col gap-2">
+                    <p className="disp text-[10px] text-muted-foreground">
+                      {beltLabel[belt]}
+                    </p>
+                    <div className="grid gap-2 sm:grid-cols-2">
+                      {items.map((c) => {
+                        const checked = field.value?.includes(c.id) ?? false
+                        return (
+                          <label
+                            key={c.id}
+                            className="flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 text-sm"
+                          >
+                            <Checkbox
+                              checked={checked}
+                              onCheckedChange={(on) =>
+                                field.onChange(
+                                  on
+                                    ? [...(field.value ?? []), c.id]
+                                    : (field.value ?? []).filter(
+                                        (id) => id !== c.id
+                                      )
+                                )
+                              }
+                            />
+                            {c.title}
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         />
       </div>
     </div>

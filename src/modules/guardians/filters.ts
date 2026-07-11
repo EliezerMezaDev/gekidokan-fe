@@ -43,7 +43,10 @@ export function applyGuardianFilters(
   filters: ParsedFilter
 ): Guardian[] {
   return guardians.filter((g) => {
-    if (filters.name && !matchesText(`${g.firstName} ${g.lastName}`, filters.name))
+    if (
+      filters.name &&
+      !matchesText(`${g.firstName} ${g.lastName}`, filters.name)
+    )
       return false
     if (
       filters.contact &&

@@ -4,7 +4,10 @@ import { useEffect, useState } from "react"
 import { Controller, useWatch, type UseFormReturn } from "react-hook-form"
 import type { StudentInput } from "@/shared/schemas/students"
 import { beltRankSchema } from "@/shared/schemas/students"
-import { relationshipTypeSchema, type Guardian } from "@/shared/schemas/guardians"
+import {
+  relationshipTypeSchema,
+  type Guardian,
+} from "@/shared/schemas/guardians"
 import { isMinor } from "@/shared/lib/age"
 import { getGuardians } from "@/modules/guardians/api"
 import { relationshipLabel } from "@/modules/guardians/relationship"

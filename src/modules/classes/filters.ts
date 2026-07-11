@@ -47,7 +47,10 @@ export function applyClassFilters(
       !matchesText(`${c.style} ${styleLabel[c.style]}`, filters.style)
     )
       return false
-    if (filters.instructor && !matchesText(c.instructorName, filters.instructor))
+    if (
+      filters.instructor &&
+      !matchesText(c.instructorName, filters.instructor)
+    )
       return false
     return true
   })

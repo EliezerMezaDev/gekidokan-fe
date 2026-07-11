@@ -22,6 +22,9 @@ export const syllabusItemSchema = z.object({
   videoUrl: z.literal("").or(z.url()).optional(),
   minBeltRank: beltRankSchema,
   style: contentStyleSchema,
+  // Prerrequisitos: ids de ítems que preceden a este (aristas del árbol de
+  // progresión). El árbol de /d/content los dibuja como flechas prereq -> item.
+  prerequisites: z.array(z.string()).default([]),
   createdAt: z.iso.datetime(),
 })
 export type SyllabusItem = z.infer<typeof syllabusItemSchema>
@@ -34,5 +37,6 @@ export const syllabusItemInputSchema = z.object({
   style: contentStyleSchema,
   videoUrl: z.literal("").or(z.url("URL de video inválida")),
   bodyMarkdown: z.string().optional(),
+  prerequisites: z.array(z.string()).default([]),
 })
 export type SyllabusItemInput = z.infer<typeof syllabusItemInputSchema>

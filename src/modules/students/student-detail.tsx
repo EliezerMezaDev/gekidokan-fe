@@ -42,13 +42,23 @@ function initials(first: string, last: string): string {
   return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase()
 }
 
-function StatCard({ label, value, unit }: { label: string; value?: number; unit: string }) {
+function StatCard({
+  label,
+  value,
+  unit,
+}: {
+  label: string
+  value?: number
+  unit: string
+}) {
   return (
     <Card className="flex flex-col justify-between gap-1 p-6">
       <Eyebrow>{label}</Eyebrow>
       <p className="font-heading text-3xl tracking-tight">
         {value ?? "—"}
-        {value ? <span className="ml-1 text-base text-muted-foreground">{unit}</span> : null}
+        {value ? (
+          <span className="ml-1 text-base text-muted-foreground">{unit}</span>
+        ) : null}
       </p>
     </Card>
   )

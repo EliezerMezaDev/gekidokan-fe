@@ -15,10 +15,16 @@ import { invoiceStatusLabel, invoiceStatusBadgeClass } from "./invoice-status"
 // Columnas de la tabla de facturas (dedicadas). La maqueta genérica
 // (selección, orden, acciones, paginación) la aporta DataTable.
 
-export function InvoiceStatusBadge({ status }: { status: MonthlyInvoice["status"] }) {
+export function InvoiceStatusBadge({
+  status,
+}: {
+  status: MonthlyInvoice["status"]
+}) {
   return (
     <Badge
-      variant={status === "PENDING" || status === "VOIDED" ? "secondary" : undefined}
+      variant={
+        status === "PENDING" || status === "VOIDED" ? "secondary" : undefined
+      }
       className={invoiceStatusBadgeClass[status] || undefined}
     >
       {invoiceStatusLabel[status]}
@@ -43,9 +49,7 @@ export const invoiceColumns: ColumnDef<MonthlyInvoice>[] = [
           </span>
           <div className="min-w-0">
             <p className="font-medium">{i.studentName}</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {i.period}
-            </p>
+            <p className="truncate text-xs text-muted-foreground">{i.period}</p>
           </div>
         </div>
       )
@@ -85,7 +89,10 @@ export const invoiceColumns: ColumnDef<MonthlyInvoice>[] = [
 export const invoiceRowActions = (
   router: ReturnType<typeof useRouter>
 ): RowAction<MonthlyInvoice>[] => [
-  { label: "Ver", onSelect: (i) => router.push(`/d/billing/invoices/${i.slug}`) },
+  {
+    label: "Ver",
+    onSelect: (i) => router.push(`/d/billing/invoices/${i.slug}`),
+  },
   {
     // ponytail: la conciliación real vive en el detalle (lista de pagos); aquí
     // solo se navega a ella.

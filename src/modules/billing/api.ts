@@ -43,9 +43,7 @@ export async function getInvoiceBySlug(
     await delay()
     return mockInvoices.find((i) => i.slug === slug) ?? null
   }
-  return monthlyInvoiceSchema.parse(
-    await api.get(`/billing/invoices/${slug}`)
-  )
+  return monthlyInvoiceSchema.parse(await api.get(`/billing/invoices/${slug}`))
 }
 
 export async function getPaymentsByInvoice(
@@ -63,7 +61,9 @@ export async function getPaymentsByInvoice(
 // Concilia (valida) un pago reportado y recalcula el estado de la factura.
 // ponytail: mock muta el arreglo en memoria (no persiste entre recargas); el
 // backend real hará esto en una transacción.
-export async function validatePayment(paymentId: string): Promise<MonthlyInvoice> {
+export async function validatePayment(
+  paymentId: string
+): Promise<MonthlyInvoice> {
   if (USE_MOCKS) {
     await delay()
     const payment = mockPayments.find((p) => p.id === paymentId)
@@ -119,9 +119,7 @@ export async function createScheme(
       ...input,
     }
   }
-  return tuitionSchemeSchema.parse(
-    await api.post("/billing/schemes", input)
-  )
+  return tuitionSchemeSchema.parse(await api.post("/billing/schemes", input))
 }
 
 export async function updateScheme(

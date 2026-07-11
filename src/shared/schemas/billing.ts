@@ -13,7 +13,12 @@ export const invoiceStatusSchema = z.enum([
 ])
 export type InvoiceStatus = z.infer<typeof invoiceStatusSchema>
 
-export const paymentMethodSchema = z.enum(["CASH", "TRANSFER", "CARD", "CRYPTO"])
+export const paymentMethodSchema = z.enum([
+  "CASH",
+  "TRANSFER",
+  "CARD",
+  "CRYPTO",
+])
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>
 
 export const tuitionStatusSchema = z.enum(["DRAFT", "APPROVED", "ARCHIVED"])

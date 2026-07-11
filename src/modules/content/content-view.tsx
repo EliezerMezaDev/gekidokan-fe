@@ -22,6 +22,7 @@ import { useQueryFilters } from "@/shared/hooks/use-query-filters"
 import { contentColumns, contentRowActions } from "./columns"
 import { ContentFilter } from "./content-filter"
 import { ContentCard } from "./content-card"
+import { ContentSyllabus } from "./content-syllabus"
 import {
   applyContentFilters,
   contentFilterSchema,
@@ -99,7 +100,11 @@ export function ContentView() {
   const applyText = (parsed: ParsedFilter) =>
     apply({ ...parsed, ...(filters.type ? { type: filters.type } : {}) })
   const setType = (value: string) =>
-    apply(value === "all" ? textOnly(filters) : { ...textOnly(filters), type: value })
+    apply(
+      value === "all"
+        ? textOnly(filters)
+        : { ...textOnly(filters), type: value }
+    )
 
   return (
     <div>
@@ -126,7 +131,7 @@ export function ContentView() {
               <TabsTrigger value="PROGRAM">Programa</TabsTrigger>
             </TabsList>
           </Tabs>
-          <ViewToggle value={view} onChange={setView} />
+          <ViewToggle value={view} onChange={setView} showSyllabus />
         </div>
       </div>
 
@@ -155,6 +160,9 @@ export function ContentView() {
             title="Sin contenido"
             description="Ningún contenido coincide con el filtro."
           />
+        ) : view === "syllabus" ? (
+          // El árbol no pagina: opera sobre todo `visible`.
+          <ContentSyllabus items={visible} />
         ) : (
           <div className="flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

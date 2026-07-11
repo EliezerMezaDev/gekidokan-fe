@@ -35,6 +35,7 @@ function toInput(c: SyllabusItem): SyllabusItemInput {
     style: c.style,
     videoUrl: c.videoUrl ?? "",
     bodyMarkdown: c.bodyMarkdown ?? "",
+    prerequisites: c.prerequisites ?? [],
   }
 }
 
@@ -116,7 +117,7 @@ export function ContentEditForm({ slug }: { slug: string }) {
             <h2 className="disp text-[11px] text-muted-foreground">
               Datos del contenido
             </h2>
-            <ContentFormFields form={form} />
+            <ContentFormFields form={form} excludeId={item.id} />
           </Card>
         </div>
 

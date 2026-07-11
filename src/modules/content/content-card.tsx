@@ -78,11 +78,7 @@ export function ContentCard({
 
       <div className="flex items-center justify-between border-t px-4 pt-3 text-xs text-muted-foreground">
         <span>Video</span>
-        {c.videoUrl ? (
-          <IconVideo className="size-4" />
-        ) : (
-          <span>—</span>
-        )}
+        {c.videoUrl ? <IconVideo className="size-4" /> : <span>—</span>}
       </div>
     </Card>
   )

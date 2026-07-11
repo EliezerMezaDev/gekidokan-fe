@@ -30,6 +30,7 @@ export function ContentRegisterForm() {
       style: "SHOTOKAN",
       videoUrl: "",
       bodyMarkdown: "",
+      prerequisites: [],
     },
   })
 

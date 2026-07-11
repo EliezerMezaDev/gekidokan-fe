@@ -136,10 +136,7 @@ export function ContentDetail({ slug }: { slug: string }) {
           <Separator className="my-7" />
 
           <dl className="grid gap-6 sm:grid-cols-2">
-            <Field
-              label="Cinta mínima"
-              value={beltLabel[c.minBeltRank]}
-            />
+            <Field label="Cinta mínima" value={beltLabel[c.minBeltRank]} />
             <Field label="Estilo" value={contentStyleLabel[c.style]} />
             <Field
               label="Enlace de video"
@@ -151,7 +148,9 @@ export function ContentDetail({ slug }: { slug: string }) {
         <Card className="p-6 sm:p-8 md:col-span-2">
           <Eyebrow>Cinta mínima</Eyebrow>
           <span className="mt-3 flex items-center gap-2 text-sm">
-            <span className={`size-2.5 rounded-full ${beltDot[c.minBeltRank]}`} />
+            <span
+              className={`size-2.5 rounded-full ${beltDot[c.minBeltRank]}`}
+            />
             {beltLabel[c.minBeltRank]}
           </span>
         </Card>
@@ -173,7 +172,7 @@ export function ContentDetail({ slug }: { slug: string }) {
             </a>
           ) : null}
           {/* ponytail: texto plano (sin lib de markdown). */}
-          <p className="mt-4 whitespace-pre-wrap text-sm text-muted-foreground">
+          <p className="mt-4 text-sm whitespace-pre-wrap text-muted-foreground">
             {c.bodyMarkdown || "Sin contenido."}
           </p>
         </Card>

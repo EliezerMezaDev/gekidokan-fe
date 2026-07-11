@@ -3,7 +3,12 @@ import { z } from "zod"
 // Espejo de backend/src/shared/schemas (ver CLAUDE.md — tipado derivado con
 // z.infer). Modelo mínimo de representante para el listado del dashboard.
 
-export const relationshipTypeSchema = z.enum(["PADRE", "MADRE", "TUTOR", "OTRO"])
+export const relationshipTypeSchema = z.enum([
+  "PADRE",
+  "MADRE",
+  "TUTOR",
+  "OTRO",
+])
 export type RelationshipType = z.infer<typeof relationshipTypeSchema>
 
 export const guardianSchema = z.object({

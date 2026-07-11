@@ -1,4 +1,8 @@
-import type { ClassStyle, DayOfWeek, ClassSchedule } from "@/shared/schemas/classes"
+import type {
+  ClassStyle,
+  DayOfWeek,
+  ClassSchedule,
+} from "@/shared/schemas/classes"
 
 // Etiquetas en español de los enums locales del módulo de clases.
 

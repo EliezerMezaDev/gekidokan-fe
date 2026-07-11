@@ -176,7 +176,8 @@ export function InvoiceDetail({ slug }: { slug: string }) {
                       {paymentMethodLabel[p.method]} · {usdFmt.format(p.amount)}
                     </p>
                     <p className="truncate text-xs text-muted-foreground">
-                      Ref. {p.reference} · {new Date(p.reportedAt).toLocaleString("es")}
+                      Ref. {p.reference} ·{" "}
+                      {new Date(p.reportedAt).toLocaleString("es")}
                     </p>
                   </div>
                   {p.validated ? (
