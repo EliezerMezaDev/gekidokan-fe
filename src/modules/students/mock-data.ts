@@ -79,7 +79,8 @@ export const mockStudents: Student[] = [
     status: "ACTIVE",
     email: "diego.f@example.com",
     birthDate: "1998-05-14",
-    accessUsername: "diego.f@example.com",
+    // vínculo con el usuario demo STUDENT de lib/auth.ts (login alumno@gekidokan.test)
+    accessUsername: "alumno@gekidokan.test",
     height: 172,
     weight: 68,
     enabledContent: ["kumite-kihon-ippon", "terminologia"],

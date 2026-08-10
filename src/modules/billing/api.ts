@@ -10,6 +10,7 @@ import {
   type TuitionSchemeInput,
   type ExchangeRate,
   type ExchangeRateInput,
+  type PaymentInput,
 } from "@/shared/schemas/billing"
 import {
   mockInvoices,
@@ -56,6 +57,32 @@ export async function getPaymentsByInvoice(
   return paymentSchema
     .array()
     .parse(await api.get(`/billing/invoices/${invoiceId}/payments`))
+}
+
+// Reporta un pago del alumno contra una factura (queda pendiente de validar).
+// ponytail: alta local simulada; no persiste entre recargas.
+export async function createPayment(
+  invoiceId: string,
+  input: PaymentInput
+): Promise<Payment> {
+  if (USE_MOCKS) {
+    await delay()
+    const created: Payment = {
+      id: `pay-${Date.now()}`,
+      invoiceId,
+      method: input.method,
+      reference: input.reference,
+      amount: input.amount,
+      reportedAt: new Date().toISOString(),
+      receiptUrl: input.receiptUrl || undefined,
+      validated: false,
+    }
+    mockPayments.push(created)
+    return created
+  }
+  return paymentSchema.parse(
+    await api.post(`/billing/invoices/${invoiceId}/payments`, input)
+  )
 }
 
 // Concilia (valida) un pago reportado y recalcula el estado de la factura.

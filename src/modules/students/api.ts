@@ -32,6 +32,19 @@ export async function getStudentBySlug(slug: string): Promise<Student | null> {
   return studentSchema.parse(await api.get(`/students/${slug}`))
 }
 
+// Resuelve el Student vinculado a la sesión (/s) a partir del email de acceso.
+export async function getStudentByAccessUsername(
+  email: string
+): Promise<Student | null> {
+  if (USE_MOCKS) {
+    await delay()
+    return mockStudents.find((s) => s.accessUsername === email) ?? null
+  }
+  return studentSchema.parse(
+    await api.get(`/students/by-access-username/${encodeURIComponent(email)}`)
+  )
+}
+
 // Normaliza los campos opcionales que el formulario entrega como "".
 function toStudentFields(input: StudentInput) {
   return {

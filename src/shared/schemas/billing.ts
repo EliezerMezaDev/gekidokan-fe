@@ -89,3 +89,11 @@ export const paymentSchema = z.object({
   validated: z.boolean().default(false),
 })
 export type Payment = z.infer<typeof paymentSchema>
+
+export const paymentInputSchema = z.object({
+  method: paymentMethodSchema,
+  reference: z.string().min(1, "La referencia es obligatoria"),
+  amount: z.number().positive("El monto debe ser mayor a 0"),
+  receiptUrl: z.literal("").or(z.url("URL de comprobante inválida")).optional(),
+})
+export type PaymentInput = z.infer<typeof paymentInputSchema>
