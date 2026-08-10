@@ -1,15 +1,19 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import {
   IconDotsVertical,
   IconLogout,
   IconUser,
   IconUserCircle,
   IconBell,
+  IconMoon,
+  IconSun,
 } from "@tabler/icons-react"
 import { Avatar, AvatarFallback } from "@/shadcn/avatar"
 import { Badge } from "@/shadcn/badge"
+import { Switch } from "@/shadcn/switch"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +45,8 @@ export function NavUser() {
   const { isMobile } = useSidebar()
   const user = useSession((s) => s.user)
   const unread = useUi((s) => s.unreadCount)
+  const { resolvedTheme, setTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
 
   function onLogout() {
     logout()
@@ -100,6 +106,19 @@ export function NavUser() {
             <DropdownMenuItem onClick={() => router.push("/d/profile")}>
               <IconUserCircle className="size-4" />
               Cuenta
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              {isDark ? (
+                <IconMoon className="size-4" />
+              ) : (
+                <IconSun className="size-4" />
+              )}
+              Tema oscuro
+              <Switch
+                checked={isDark}
+                onCheckedChange={(v) => setTheme(v ? "dark" : "light")}
+                className="ml-auto"
+              />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onLogout}>

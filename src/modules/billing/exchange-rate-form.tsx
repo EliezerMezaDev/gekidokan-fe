@@ -61,13 +61,19 @@ export function ExchangeRateForm({
               id="rate"
               type="number"
               step="0.0001"
+              placeholder="Ej. 36.50"
               {...register("rate", { valueAsNumber: true })}
             />
             <FieldError message={errors.rate?.message} />
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="validFrom">Vigente desde</Label>
-            <Input id="validFrom" type="date" {...register("validFrom")} />
+            <Input
+              id="validFrom"
+              type="date"
+              placeholder="aaaa-mm-dd"
+              {...register("validFrom")}
+            />
             <FieldError message={errors.validFrom?.message} />
           </div>
           <div className="flex flex-col gap-2">
@@ -75,6 +81,7 @@ export function ExchangeRateForm({
             <Input
               id="validUntil"
               type="date"
+              placeholder="aaaa-mm-dd"
               {...register("validUntil", {
                 setValueAs: (v) => (v === "" ? undefined : v),
               })}

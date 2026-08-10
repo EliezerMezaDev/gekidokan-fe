@@ -13,7 +13,6 @@ import {
 import { ModuleHeader } from "@/shared/components/module-header"
 import { Card } from "@/shadcn/card"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { createSyllabusItem } from "./api"
 import { ContentFormFields } from "./content-form-fields"
 
@@ -63,9 +62,7 @@ export function ContentRegisterForm() {
           <ContentFormFields form={form} />
         </Card>
 
-        <Separator className="my-6" />
-
-        <div className="flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" asChild>
             <Link href="/d/content">Cancelar</Link>
           </Button>

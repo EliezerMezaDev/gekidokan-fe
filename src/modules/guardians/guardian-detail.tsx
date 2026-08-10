@@ -14,7 +14,6 @@ import {
 import { Card } from "@/shadcn/card"
 import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { getGuardianBySlug } from "./api"
 import { getStudents } from "@/modules/students/api"
 import { relationshipLabel } from "./relationship"
@@ -124,9 +123,7 @@ export function GuardianDetail({ slug }: { slug: string }) {
             </div>
           </div>
 
-          <Separator className="my-7" />
-
-          <dl className="grid gap-6 sm:grid-cols-3">
+          <dl className="mt-7 grid gap-6 sm:grid-cols-3">
             <Field label="Correo" value={g.email ?? "—"} />
             <Field label="Teléfono" value={g.phone ?? "—"} />
             <Field label="Cédula" value={g.nationalId ?? "—"} />

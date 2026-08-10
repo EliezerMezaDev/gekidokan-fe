@@ -13,7 +13,6 @@ import {
 } from "@/shared/components/states"
 import { Card } from "@/shadcn/card"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { getInvoiceBySlug, getPaymentsByInvoice, validatePayment } from "./api"
 import { usdFmt, localFmt } from "./money"
 import { InvoiceStatusBadge } from "./columns"
@@ -135,9 +134,7 @@ export function InvoiceDetail({ slug }: { slug: string }) {
             <InvoiceStatusBadge status={i.status} />
           </div>
 
-          <Separator className="my-7" />
-
-          <dl className="grid gap-6 sm:grid-cols-2">
+          <dl className="mt-7 grid gap-6 sm:grid-cols-2">
             <Field label="Monto USD" value={usdFmt.format(i.amountUsd)} />
             <Field label="Tasa de cambio" value={i.exchangeRate.toString()} />
             <Field label="Monto local" value={localFmt.format(i.localAmount)} />

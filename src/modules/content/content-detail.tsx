@@ -16,7 +16,6 @@ import {
 import { Card } from "@/shadcn/card"
 import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { getSyllabusItemBySlug } from "./api"
 import { syllabusTypeLabel, contentStyleLabel } from "./content-labels"
 
@@ -133,9 +132,7 @@ export function ContentDetail({ slug }: { slug: string }) {
             <Badge variant="secondary">{syllabusTypeLabel[c.type]}</Badge>
           </div>
 
-          <Separator className="my-7" />
-
-          <dl className="grid gap-6 sm:grid-cols-2">
+          <dl className="mt-7 grid gap-6 sm:grid-cols-2">
             <Field label="Cinta mínima" value={beltLabel[c.minBeltRank]} />
             <Field label="Estilo" value={contentStyleLabel[c.style]} />
             <Field

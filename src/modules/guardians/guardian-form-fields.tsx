@@ -23,12 +23,20 @@ export function GuardianFormFields({
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-2">
         <Label htmlFor="firstName">Nombre</Label>
-        <Input id="firstName" {...register("firstName")} />
+        <Input
+          id="firstName"
+          placeholder="Ej. Carla"
+          {...register("firstName")}
+        />
         <FieldError message={errors.firstName?.message} />
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="lastName">Apellido</Label>
-        <Input id="lastName" {...register("lastName")} />
+        <Input
+          id="lastName"
+          placeholder="Ej. Gómez"
+          {...register("lastName")}
+        />
         <FieldError message={errors.lastName?.message} />
       </div>
       <div className="flex flex-col gap-2">

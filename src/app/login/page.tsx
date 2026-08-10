@@ -50,7 +50,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-xl bg-card/95 p-12 shadow-2xl backdrop-blur">
+    <div className="w-full max-w-md rounded-xl bg-card p-12 shadow-2xl backdrop-blur">
       <div className="flex items-center justify-center">
         <img
           src="/images/brand/isologo.png"

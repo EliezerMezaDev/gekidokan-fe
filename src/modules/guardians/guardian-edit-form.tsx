@@ -20,7 +20,6 @@ import {
 } from "@/shared/components/states"
 import { Card } from "@/shadcn/card"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { getGuardianBySlug, updateGuardian } from "./api"
 import { GuardianFormFields } from "./guardian-form-fields"
 
@@ -119,9 +118,7 @@ export function GuardianEditForm({ slug }: { slug: string }) {
           </Card>
         </div>
 
-        <Separator className="my-6" />
-
-        <div className="flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" asChild>
             <Link href={`/d/guardians/${guardian.slug}`}>Cancelar</Link>
           </Button>

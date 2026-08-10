@@ -35,7 +35,11 @@ export function SchemeFormFields({
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-2 sm:col-span-2">
         <Label htmlFor="name">Nombre</Label>
-        <Input id="name" {...register("name")} />
+        <Input
+          id="name"
+          placeholder="Ej. Mensualidad estándar"
+          {...register("name")}
+        />
         <FieldError message={errors.name?.message} />
       </div>
       <div className="flex flex-col gap-2">
@@ -44,6 +48,7 @@ export function SchemeFormFields({
           id="amountUsd"
           type="number"
           step="0.01"
+          placeholder="0.00"
           {...register("amountUsd", { valueAsNumber: true })}
         />
         <FieldError message={errors.amountUsd?.message} />
@@ -76,6 +81,7 @@ export function SchemeFormFields({
           type="number"
           min={1}
           max={28}
+          placeholder="Día del mes (1-28)"
           {...register("cutoffDay", { valueAsNumber: true })}
         />
         <FieldError message={errors.cutoffDay?.message} />
@@ -87,6 +93,7 @@ export function SchemeFormFields({
           type="number"
           min={1}
           max={28}
+          placeholder="Día del mes (1-28)"
           {...register("dueDay", { valueAsNumber: true })}
         />
         <FieldError message={errors.dueDay?.message} />

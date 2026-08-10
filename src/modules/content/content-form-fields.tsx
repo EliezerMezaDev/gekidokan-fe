@@ -44,7 +44,11 @@ export function ContentFormFields({
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <Label htmlFor="title">Título</Label>
-        <Input id="title" {...register("title")} />
+        <Input
+          id="title"
+          placeholder="Ej. Heian Shodan"
+          {...register("title")}
+        />
         <FieldError message={errors.title?.message} />
       </div>
 

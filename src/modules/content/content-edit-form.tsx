@@ -20,7 +20,6 @@ import {
 } from "@/shared/components/states"
 import { Card } from "@/shadcn/card"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { getSyllabusItemBySlug, updateSyllabusItem } from "./api"
 import { ContentFormFields } from "./content-form-fields"
 
@@ -121,9 +120,7 @@ export function ContentEditForm({ slug }: { slug: string }) {
           </Card>
         </div>
 
-        <Separator className="my-6" />
-
-        <div className="flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" asChild>
             <Link href={`/d/content/${item.slug}`}>Cancelar</Link>
           </Button>

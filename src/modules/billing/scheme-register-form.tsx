@@ -13,7 +13,6 @@ import {
 import { ModuleHeader } from "@/shared/components/module-header"
 import { Card } from "@/shadcn/card"
 import { Button } from "@/shadcn/button"
-import { Separator } from "@/shadcn/separator"
 import { createScheme } from "./api"
 import { SchemeFormFields } from "./scheme-form-fields"
 
@@ -62,9 +61,7 @@ export function SchemeRegisterForm() {
           <SchemeFormFields form={form} />
         </Card>
 
-        <Separator className="my-6" />
-
-        <div className="flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2">
           <Button variant="ghost" asChild>
             <Link href="/d/billing/schemes">Cancelar</Link>
           </Button>

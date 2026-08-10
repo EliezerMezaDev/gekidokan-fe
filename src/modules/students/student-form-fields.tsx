@@ -58,12 +58,20 @@ export function BasicFields({ form }: Props) {
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-2">
         <Label htmlFor="firstName">Nombre</Label>
-        <Input id="firstName" {...register("firstName")} />
+        <Input
+          id="firstName"
+          placeholder="Nombre del alumno"
+          {...register("firstName")}
+        />
         <FieldError message={errors.firstName?.message} />
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="lastName">Apellido</Label>
-        <Input id="lastName" {...register("lastName")} />
+        <Input
+          id="lastName"
+          placeholder="Apellido del alumno"
+          {...register("lastName")}
+        />
         <FieldError message={errors.lastName?.message} />
       </div>
       <div className="flex flex-col gap-2">
@@ -82,7 +90,12 @@ export function BasicFields({ form }: Props) {
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="birthDate">Fecha de nacimiento</Label>
-        <Input id="birthDate" type="date" {...register("birthDate")} />
+        <Input
+          id="birthDate"
+          type="date"
+          placeholder="dd/mm/aaaa"
+          {...register("birthDate")}
+        />
         <FieldError message={errors.birthDate?.message} />
       </div>
       <div className="flex flex-col gap-2">
