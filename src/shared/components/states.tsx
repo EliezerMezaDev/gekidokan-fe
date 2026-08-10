@@ -4,9 +4,6 @@ import { Skeleton } from "@/shadcn/skeleton"
 import { Alert, AlertTitle, AlertDescription } from "@/shadcn/alert"
 import { Button } from "@/shadcn/button"
 
-// Patrones de estado reutilizables (loading / empty / error). Se usan en todas
-// las etapas en vez de reinventar el estado por página.
-
 export function LoadingState({ rows = 3 }: { rows?: number }) {
   return (
     <div className="flex flex-col gap-3" role="status" aria-label="Cargando">
