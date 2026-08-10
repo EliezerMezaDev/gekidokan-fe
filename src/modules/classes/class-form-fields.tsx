@@ -39,7 +39,11 @@ export function ClassBasicFields({ form }: Props) {
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="flex flex-col gap-2">
         <Label htmlFor="name">Nombre</Label>
-        <Input id="name" {...register("name")} />
+        <Input
+          id="name"
+          placeholder="Ej. Karate infantil"
+          {...register("name")}
+        />
         <FieldError message={errors.name?.message} />
       </div>
       <div className="flex flex-col gap-2">
@@ -65,7 +69,11 @@ export function ClassBasicFields({ form }: Props) {
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="instructorName">Instructor</Label>
-        <Input id="instructorName" {...register("instructorName")} />
+        <Input
+          id="instructorName"
+          placeholder="Nombre del instructor"
+          {...register("instructorName")}
+        />
         <FieldError message={errors.instructorName?.message} />
       </div>
       <div className="flex flex-col gap-2">
@@ -114,7 +122,7 @@ export function ClassScheduleFields({ form }: Props) {
                 render={({ field: f }) => (
                   <Select value={f.value} onValueChange={f.onChange}>
                     <SelectTrigger id={`day-${index}`} className="w-32">
-                      <SelectValue />
+                      <SelectValue placeholder="Día" />
                     </SelectTrigger>
                     <SelectContent>
                       {dayOfWeekSchema.options.map((d) => (
