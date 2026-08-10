@@ -1,10 +1,8 @@
-import { toast } from "sonner"
 import { api } from "@/shared/lib/api"
 import {
   classSchema,
   type KarateClass,
   type ClassInput,
-  type AttendanceRecord,
 } from "@/shared/schemas/classes"
 import { mockClasses } from "./mock-data"
 import { slugify } from "./slug"
@@ -77,21 +75,4 @@ export async function updateClass(
   return classSchema.parse(
     await api.patch(`/classes/${slug}`, toClassFields(input))
   )
-}
-
-// ponytail: la asistencia no persiste en mocks (eco + toast); el backend real
-// guardará el registro por fecha en /classes/:id/attendance.
-export async function saveAttendance(
-  classId: string,
-  date: string,
-  records: AttendanceRecord[]
-): Promise<void> {
-  if (USE_MOCKS) {
-    await delay()
-    toast.success(
-      `Asistencia guardada para ${date} (${records.length} alumnos)`
-    )
-    return
-  }
-  await api.post(`/classes/${classId}/attendance`, { date, records })
 }
