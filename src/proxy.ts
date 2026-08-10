@@ -18,7 +18,7 @@ function roleFromToken(token: string): string | null {
   }
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
   const token = req.cookies.get(COOKIE)?.value
   const role = token ? roleFromToken(token) : null
