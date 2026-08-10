@@ -37,6 +37,6 @@ export const syllabusItemInputSchema = z.object({
   style: contentStyleSchema,
   videoUrl: z.literal("").or(z.url("URL de video inválida")),
   bodyMarkdown: z.string().optional(),
-  prerequisites: z.array(z.string()).default([]),
+  prerequisites: z.array(z.string()),
 })
 export type SyllabusItemInput = z.infer<typeof syllabusItemInputSchema>

@@ -68,7 +68,12 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
     orig: Pt
     moved: boolean
   } | null>(null)
-  const panRef = useRef<{ startX: number; startY: number; tx: number; ty: number } | null>(null)
+  const panRef = useRef<{
+    startX: number
+    startY: number
+    tx: number
+    ty: number
+  } | null>(null)
 
   const posOf = (id: string): Pt => drag[id] ?? basePos[id] ?? { x: 0, y: 0 }
 
@@ -116,7 +121,11 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       const r = el.getBoundingClientRect()
-      zoomAt(e.deltaY < 0 ? 1.1 : 1 / 1.1, e.clientX - r.left, e.clientY - r.top)
+      zoomAt(
+        e.deltaY < 0 ? 1.1 : 1 / 1.1,
+        e.clientX - r.left,
+        e.clientY - r.top
+      )
     }
     el.addEventListener("wheel", onWheel, { passive: false })
     return () => el.removeEventListener("wheel", onWheel)
@@ -137,12 +146,21 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
   function onViewportPointerDown(e: React.PointerEvent) {
     if (e.button !== 0) return
     e.currentTarget.setPointerCapture(e.pointerId)
-    panRef.current = { startX: e.clientX, startY: e.clientY, tx: view.tx, ty: view.ty }
+    panRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      tx: view.tx,
+      ty: view.ty,
+    }
   }
   function onViewportPointerMove(e: React.PointerEvent) {
     const p = panRef.current
     if (p) {
-      setView((v) => ({ ...v, tx: p.tx + (e.clientX - p.startX), ty: p.ty + (e.clientY - p.startY) }))
+      setView((v) => ({
+        ...v,
+        tx: p.tx + (e.clientX - p.startX),
+        ty: p.ty + (e.clientY - p.startY),
+      }))
       return
     }
     const c = cardRef.current
@@ -152,7 +170,10 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
     if (!c.moved && Math.hypot(dx, dy) < 4) return // umbral: distingue drag de click.
     c.moved = true
     // El puntero se mueve en px de pantalla; el lienzo está escalado por s.
-    setDrag((prev) => ({ ...prev, [c.id]: { x: c.orig.x + dx / view.s, y: c.orig.y + dy / view.s } }))
+    setDrag((prev) => ({
+      ...prev,
+      [c.id]: { x: c.orig.x + dx / view.s, y: c.orig.y + dy / view.s },
+    }))
   }
   function onViewportPointerUp() {
     panRef.current = null
@@ -162,7 +183,13 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
   function onCardPointerDown(e: React.PointerEvent, id: string) {
     e.stopPropagation()
     e.currentTarget.setPointerCapture(e.pointerId)
-    cardRef.current = { id, startX: e.clientX, startY: e.clientY, orig: posOf(id), moved: false }
+    cardRef.current = {
+      id,
+      startX: e.clientX,
+      startY: e.clientY,
+      orig: posOf(id),
+      moved: false,
+    }
   }
   function onCardPointerUp(item: SyllabusItem) {
     const c = cardRef.current
@@ -185,7 +212,8 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
         const y2 = to.y
         const dy = (y2 - y1) / 2
         // Resaltada si ambos extremos están en la cadena enfocada.
-        const hi = related != null && related.has(prereqId) && related.has(item.id)
+        const hi =
+          related != null && related.has(prereqId) && related.has(item.id)
         return {
           id: `${prereqId}->${item.id}`,
           d: `M ${x1} ${y1} C ${x1} ${y1 + dy} ${x2} ${y2 - dy} ${x2} ${y2}`,
@@ -223,7 +251,9 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
           {edges.map((e) => {
             // Por defecto grises; resaltadas → color de texto (blanco en oscuro);
             // el resto se atenúa cuando hay una card enfocada.
-            const stroke = e.hi ? "var(--foreground)" : "var(--muted-foreground)"
+            const stroke = e.hi
+              ? "var(--foreground)"
+              : "var(--muted-foreground)"
             const opacity = related == null ? 0.7 : e.hi ? 1 : 0.12
             return (
               <path
@@ -248,12 +278,15 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
             className="absolute flex items-center gap-2"
             style={{
               left: 8,
-              top: PAD_TOP + (rowOfBelt.get(belt) ?? 0) * ROW_H + CARD_H / 2 - 16,
+              top:
+                PAD_TOP + (rowOfBelt.get(belt) ?? 0) * ROW_H + CARD_H / 2 - 16,
               width: LABEL_W - 16,
             }}
           >
             <span className={`h-8 w-2 rounded-full ${beltBar[belt]}`} />
-            <span className="disp text-xs text-muted-foreground">{beltLabel[belt]}</span>
+            <span className="disp text-xs text-muted-foreground">
+              {beltLabel[belt]}
+            </span>
           </div>
         ))}
 
@@ -267,19 +300,25 @@ export function ContentSyllabus({ items }: { items: SyllabusItem[] }) {
               onPointerDown={(e) => onCardPointerDown(e, item.id)}
               onPointerUp={() => onCardPointerUp(item)}
               onPointerEnter={() => setFocusId(item.id)}
-              onPointerLeave={() => setFocusId((cur) => (cur === item.id ? null : cur))}
+              onPointerLeave={() =>
+                setFocusId((cur) => (cur === item.id ? null : cur))
+              }
               className={`absolute z-10 flex cursor-grab touch-none flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all select-none hover:border-[color:var(--ring)] active:cursor-grabbing ${
                 dimmed ? "opacity-40" : "opacity-100"
               }`}
               style={{ left: p.x, top: p.y, width: CARD_W, height: CARD_H }}
             >
-              <div className={`h-1.5 w-full shrink-0 ${beltBar[item.minBeltRank]}`} />
+              <div
+                className={`h-1.5 w-full shrink-0 ${beltBar[item.minBeltRank]}`}
+              />
               <div className="flex flex-1 items-center gap-3 p-3">
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
                   <IconBook2 className="size-5" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-foreground">{item.title}</p>
+                  <p className="truncate text-sm font-medium text-foreground">
+                    {item.title}
+                  </p>
                   <p className="truncate text-xs text-muted-foreground">
                     {syllabusTypeLabel[item.type]}
                   </p>
