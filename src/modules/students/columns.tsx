@@ -1,4 +1,4 @@
-import { IconUser } from "@tabler/icons-react"
+import { IconUser, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { Student } from "@/shared/schemas/students"
@@ -99,14 +99,20 @@ export const studentColumns: ColumnDef<Student>[] = [
 export const studentRowActions = (
   router: ReturnType<typeof useRouter>
 ): RowAction<Student>[] => [
-  { label: "Ver", onSelect: (s) => router.push(`/d/students/${s.slug}`) },
+  {
+    label: "Ver",
+    icon: IconEye,
+    onSelect: (s) => router.push(`/d/students/${s.slug}`),
+  },
   {
     label: "Editar",
+    icon: IconPencil,
     onSelect: (s) => router.push(`/d/students/${s.slug}/edit`),
   },
   {
     // ponytail: eliminar es placeholder (fuera de alcance); avisa sin mutar.
     label: "Eliminar",
+    icon: IconTrash,
     onSelect: () => toast.info("Eliminar alumno aún no está disponible."),
     destructive: true,
     separatorBefore: true,

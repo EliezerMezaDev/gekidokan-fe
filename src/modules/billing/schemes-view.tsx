@@ -71,6 +71,8 @@ export function SchemesView() {
         rowActions={() => schemeRowActions(router)}
         onRowClick={(s) => router.push(`/d/billing/schemes/${s.slug}/edit`)}
         exportable
+        exportAll={getSchemes}
+        persistKey="billing-schemes"
         exportFileName="esquemas"
         emptyTitle="Sin esquemas"
         emptyDescription="Aún no hay esquemas de mensualidad."

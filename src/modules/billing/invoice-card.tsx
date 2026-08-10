@@ -57,6 +57,7 @@ export function InvoiceCard({
                   variant={a.destructive ? "destructive" : "default"}
                   onClick={() => a.onSelect(i)}
                 >
+                  {a.icon ? <a.icon className="size-4" /> : null}
                   {a.label}
                 </DropdownMenuItem>
               </Fragment>

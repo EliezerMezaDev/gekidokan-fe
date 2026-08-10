@@ -1,4 +1,4 @@
-import { IconFileInvoice } from "@tabler/icons-react"
+import { IconFileInvoice, IconEye, IconReceipt2 } from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { MonthlyInvoice } from "@/shared/schemas/billing"
@@ -91,12 +91,14 @@ export const invoiceRowActions = (
 ): RowAction<MonthlyInvoice>[] => [
   {
     label: "Ver",
+    icon: IconEye,
     onSelect: (i) => router.push(`/d/billing/invoices/${i.slug}`),
   },
   {
     // ponytail: la conciliación real vive en el detalle (lista de pagos); aquí
     // solo se navega a ella.
     label: "Conciliar",
+    icon: IconReceipt2,
     onSelect: (i) => router.push(`/d/billing/invoices/${i.slug}`),
   },
 ]

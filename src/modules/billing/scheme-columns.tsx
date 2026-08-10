@@ -1,4 +1,5 @@
 import type { useRouter } from "next/navigation"
+import { IconPencil } from "@tabler/icons-react"
 import type { TuitionScheme } from "@/shared/schemas/billing"
 import {
   SortableHeader,
@@ -55,6 +56,7 @@ export const schemeRowActions = (
 ): RowAction<TuitionScheme>[] => [
   {
     label: "Editar",
+    icon: IconPencil,
     onSelect: (s) => router.push(`/d/billing/schemes/${s.slug}/edit`),
   },
 ]

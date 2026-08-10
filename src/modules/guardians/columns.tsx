@@ -1,4 +1,4 @@
-import { IconUser } from "@tabler/icons-react"
+import { IconUser, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { Guardian } from "@/shared/schemas/guardians"
@@ -69,14 +69,20 @@ export const guardianColumns: ColumnDef<Guardian>[] = [
 export const guardianRowActions = (
   router: ReturnType<typeof useRouter>
 ): RowAction<Guardian>[] => [
-  { label: "Ver", onSelect: (g) => router.push(`/d/guardians/${g.slug}`) },
+  {
+    label: "Ver",
+    icon: IconEye,
+    onSelect: (g) => router.push(`/d/guardians/${g.slug}`),
+  },
   {
     label: "Editar",
+    icon: IconPencil,
     onSelect: (g) => router.push(`/d/guardians/${g.slug}/edit`),
   },
   {
     // ponytail: eliminar es placeholder (fuera de alcance); avisa sin mutar.
     label: "Eliminar",
+    icon: IconTrash,
     onSelect: () =>
       toast.info("Eliminar representante aún no está disponible."),
     destructive: true,

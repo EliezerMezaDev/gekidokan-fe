@@ -19,6 +19,7 @@ import {
 import { Button } from "@/shadcn/button"
 import { Tabs, TabsList, TabsTrigger } from "@/shadcn/tabs"
 import { useQueryFilters } from "@/shared/hooks/use-query-filters"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 import { invoiceColumns, invoiceRowActions } from "./columns"
 import { InvoicesFilter } from "./invoices-filter"
 import { InvoiceCard } from "./invoice-card"
@@ -48,7 +49,10 @@ export function InvoicesView() {
   const [invoices, setInvoices] = useState<MonthlyInvoice[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = useLocalStorageState<ViewMode>(
+    "view:billing-invoices",
+    "table"
+  )
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 
@@ -150,6 +154,8 @@ export function InvoicesView() {
             rowActions={() => actions}
             onRowClick={(i) => router.push(`/d/billing/invoices/${i.slug}`)}
             exportable
+            exportAll={getInvoices}
+            persistKey="billing-invoices"
             exportFileName="facturas"
             emptyTitle="Sin facturas"
             emptyDescription="Ninguna factura coincide con el filtro."

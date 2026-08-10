@@ -94,6 +94,8 @@ export function ExchangeRateView() {
           loading={loading}
           error={error}
           onRetry={retry}
+          exportAll={getExchangeRates}
+          persistKey="billing-exchange-rate"
           emptyTitle="Sin tasas"
           emptyDescription="Aún no se ha registrado ninguna tasa de cambio."
         />

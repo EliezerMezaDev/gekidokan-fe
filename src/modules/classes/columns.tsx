@@ -1,4 +1,9 @@
-import { IconKarate } from "@tabler/icons-react"
+import {
+  IconKarate,
+  IconEye,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { KarateClass } from "@/shared/schemas/classes"
@@ -76,14 +81,20 @@ export const classColumns: ColumnDef<KarateClass>[] = [
 export const classRowActions = (
   router: ReturnType<typeof useRouter>
 ): RowAction<KarateClass>[] => [
-  { label: "Ver", onSelect: (c) => router.push(`/d/classes/${c.slug}`) },
+  {
+    label: "Ver",
+    icon: IconEye,
+    onSelect: (c) => router.push(`/d/classes/${c.slug}`),
+  },
   {
     label: "Editar",
+    icon: IconPencil,
     onSelect: (c) => router.push(`/d/classes/${c.slug}/edit`),
   },
   {
     // ponytail: eliminar es placeholder (fuera de alcance); avisa sin mutar.
     label: "Eliminar",
+    icon: IconTrash,
     onSelect: () => toast.info("Eliminar clase aún no está disponible."),
     destructive: true,
     separatorBefore: true,

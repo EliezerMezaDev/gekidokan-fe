@@ -11,6 +11,7 @@ import { ModuleHeader } from "@/shared/components/module-header"
 import { DataTable } from "@/shared/components/data-table"
 import { TablePagination } from "@/shared/components/table-pagination"
 import { ViewToggle, type ViewMode } from "@/shared/components/view-toggle"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 import {
   CardGridSkeleton,
   EmptyState,
@@ -48,7 +49,7 @@ export function StudentsView() {
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = useLocalStorageState<ViewMode>("view:students", "table")
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 
@@ -147,6 +148,8 @@ export function StudentsView() {
             onRowClick={(s) => router.push(`/d/students/${s.slug}`)}
             exportable
             exportFileName="alumnos"
+            exportAll={() => getStudents()}
+            persistKey="students"
             emptyTitle="Sin alumnos"
             emptyDescription="Ningún alumno coincide con el filtro."
           />

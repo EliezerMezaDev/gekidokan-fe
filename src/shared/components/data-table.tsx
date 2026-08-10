@@ -19,11 +19,13 @@ import {
   IconDotsVertical,
   IconDownload,
   IconLayoutColumns,
+  IconLoader2,
   IconSelector,
   IconSearch,
 } from "@tabler/icons-react"
 
 import { cn } from "@/shared/lib/utils"
+import { csvCell } from "@/shared/lib/csv"
 import { Button } from "@/shadcn/button"
 import { Checkbox } from "@/shadcn/checkbox"
 import {
@@ -52,6 +54,8 @@ import {
   TableRow,
 } from "@/shadcn/table"
 import { TableSkeleton, EmptyState, ErrorState } from "./states"
+import { ExportDialog } from "./export-dialog"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 
 // Forma general de los módulos basados en tabla del dashboard (ver referencia
 // apex-dashboard). Cada módulo declara sus `columns` (ColumnDef de TanStack) y
@@ -114,16 +118,12 @@ export function selectionColumn<T>(): ColumnDef<T> {
 export type RowAction<T> = {
   label: string
   onSelect: (row: T) => void
+  icon?: React.ComponentType<{ className?: string }>
   destructive?: boolean
   separatorBefore?: boolean
 }
 
 export type { ColumnDef }
-
-function csvCell(value: unknown): string {
-  const s = value == null ? "" : String(value)
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
-}
 
 export function DataTable<T>({
   columns,
@@ -139,6 +139,8 @@ export function DataTable<T>({
   rowActions,
   exportable = false,
   exportFileName = "export",
+  exportAll,
+  persistKey,
   onRowClick,
   emptyTitle = "Sin resultados",
   emptyDescription,
@@ -162,6 +164,12 @@ export function DataTable<T>({
   rowActions?: (row: T) => RowAction<T>[]
   exportable?: boolean
   exportFileName?: string
+  // si se provee, "Exportar" abre ExportDialog (trae TODOS los items, no solo
+  // la página/filtro visible) en vez de exportar directo las filas filtradas.
+  exportAll?: () => Promise<T[]>
+  // si se provee, la visibilidad de columnas persiste en localStorage bajo
+  // `${persistKey}:columns`.
+  persistKey?: string
   onRowClick?: (row: T) => void
   emptyTitle?: string
   emptyDescription?: string
@@ -172,9 +180,33 @@ export function DataTable<T>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const [columnVisibility, setColumnVisibility] =
+  // ponytail: ambos hooks se llaman siempre (regla de hooks); sin persistKey
+  // se usa el useState local y el de localStorage queda sin leerse/usarse.
+  const [localColumnVisibility, setLocalColumnVisibility] =
     React.useState<VisibilityState>({})
+  const [storedColumnVisibility, setStoredColumnVisibility] =
+    useLocalStorageState<VisibilityState>(
+      persistKey ? `${persistKey}:columns` : "__data-table:unused-columns",
+      {}
+    )
+  const [columnVisibility, setColumnVisibility] = persistKey
+    ? [storedColumnVisibility, setStoredColumnVisibility]
+    : [localColumnVisibility, setLocalColumnVisibility]
   const [rowSelection, setRowSelection] = React.useState({})
+  // ponytail: exportAll() se resuelve ANTES de abrir el Dialog (loading vive
+  // en el botón, no dentro del diálogo) — abrir un Dialog de Radix con foco
+  // real y mutar su estado interno mientras está abierto cuelga la pestaña
+  // en Chromium (bug reproducido con click real, ver export-dialog.tsx).
+  const [exportItems, setExportItems] = React.useState<T[] | null>(null)
+  const [exportLoading, setExportLoading] = React.useState(false)
+
+  function openExport() {
+    if (!exportAll) return
+    setExportLoading(true)
+    exportAll()
+      .then(setExportItems)
+      .finally(() => setExportLoading(false))
+  }
 
   // Columna de acciones (⋯) autogenerada cuando hay rowActions.
   const allColumns = React.useMemo<ColumnDef<T>[]>(() => {
@@ -205,6 +237,7 @@ export function DataTable<T>({
                     variant={a.destructive ? "destructive" : "default"}
                     onClick={() => a.onSelect(row.original)}
                   >
+                    {a.icon ? <a.icon className="size-4" /> : null}
                     {a.label}
                   </DropdownMenuItem>
                 </React.Fragment>
@@ -277,9 +310,18 @@ export function DataTable<T>({
         ) : null}
         <div className="ml-auto flex items-center gap-2">
           {toolbarEnd}
-          {exportable ? (
-            <Button variant="outline" size="sm" onClick={exportCsv}>
-              <IconDownload className="size-4" />
+          {exportable || exportAll ? (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={exportLoading}
+              onClick={() => (exportAll ? openExport() : exportCsv())}
+            >
+              {exportLoading ? (
+                <IconLoader2 className="size-4 animate-spin" />
+              ) : (
+                <IconDownload className="size-4" />
+              )}
               <span className="hidden sm:inline">Exportar</span>
             </Button>
           ) : null}
@@ -352,7 +394,7 @@ export function DataTable<T>({
                 const tableRow = (
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
-                    onClick={
+                    onDoubleClick={
                       onRowClick ? () => onRowClick(row.original) : undefined
                     }
                     className={onRowClick ? "cursor-pointer" : undefined}
@@ -386,6 +428,7 @@ export function DataTable<T>({
                             variant={a.destructive ? "destructive" : "default"}
                             onSelect={() => a.onSelect(row.original)}
                           >
+                            {a.icon ? <a.icon className="size-4" /> : null}
                             {a.label}
                           </ContextMenuItem>
                         </React.Fragment>
@@ -407,6 +450,18 @@ export function DataTable<T>({
         onPageChange={table.setPageIndex}
         onPageSizeChange={table.setPageSize}
       />
+
+      {exportAll ? (
+        <ExportDialog
+          open={exportItems !== null}
+          onOpenChange={(v) => {
+            if (!v) setExportItems(null)
+          }}
+          columns={allColumns}
+          items={exportItems ?? []}
+          exportFileName={exportFileName}
+        />
+      ) : null}
     </div>
   )
 }

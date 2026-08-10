@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { IconPlus } from "@tabler/icons-react"
@@ -48,7 +49,7 @@ export function ContentView() {
   const [items, setItems] = useState<SyllabusItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = useLocalStorageState<ViewMode>("view:content", "table")
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 
@@ -148,6 +149,8 @@ export function ContentView() {
             onRowClick={(c) => router.push(`/d/content/${c.slug}`)}
             exportable
             exportFileName="contenido"
+            exportAll={() => getSyllabusItems()}
+            persistKey="content"
             emptyTitle="Sin contenido"
             emptyDescription="Ningún contenido coincide con el filtro."
           />

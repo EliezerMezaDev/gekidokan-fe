@@ -17,6 +17,7 @@ import {
 } from "@/shared/components/states"
 import { Button } from "@/shadcn/button"
 import { useQueryFilters } from "@/shared/hooks/use-query-filters"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 import { guardianColumns, guardianRowActions } from "./columns"
 import { GuardiansFilter } from "./guardians-filter"
 import { GuardianCard } from "./guardian-card"
@@ -34,7 +35,7 @@ export function GuardiansView() {
   const [guardians, setGuardians] = useState<Guardian[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = useLocalStorageState<ViewMode>("view:guardians", "table")
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 
@@ -115,6 +116,8 @@ export function GuardiansView() {
             onRowClick={(g) => router.push(`/d/guardians/${g.slug}`)}
             exportable
             exportFileName="representantes"
+            exportAll={() => getGuardians()}
+            persistKey="guardians"
             emptyTitle="Sin representantes"
             emptyDescription="Ningún representante coincide con el filtro."
           />

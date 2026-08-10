@@ -19,6 +19,7 @@ import {
 import { Button } from "@/shadcn/button"
 import { Tabs, TabsList, TabsTrigger } from "@/shadcn/tabs"
 import { useQueryFilters } from "@/shared/hooks/use-query-filters"
+import { useLocalStorageState } from "@/shared/hooks/use-local-storage-state"
 import { classColumns, classRowActions } from "./columns"
 import { ClassesFilter } from "./classes-filter"
 import { ClassCard } from "./class-card"
@@ -37,7 +38,7 @@ export function ClassesView() {
   const [classes, setClasses] = useState<KarateClass[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useState<ViewMode>("table")
+  const [view, setView] = useLocalStorageState<ViewMode>("view:classes", "table")
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 
@@ -132,6 +133,8 @@ export function ClassesView() {
             onRowClick={(c) => router.push(`/d/classes/${c.slug}`)}
             exportable
             exportFileName="clases"
+            exportAll={() => getClasses()}
+            persistKey="classes"
             emptyTitle="Sin clases"
             emptyDescription="Ninguna clase coincide con el filtro."
           />
