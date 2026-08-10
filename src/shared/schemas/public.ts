@@ -52,6 +52,30 @@ export const blogPostSchema = blogPostSummarySchema.extend({
 })
 export type BlogPost = z.infer<typeof blogPostSchema>
 
+// Esquemas del CMS de blog (panel admin /d/blog). blogPostAdminSchema suma los
+// campos que solo ve el admin (id, tags, visibilidad, fecha de alta) sobre el
+// mismo post público.
+export const blogPostAdminSchema = blogPostSummarySchema.extend({
+  id: z.string(),
+  bodyMarkdown: z.string(),
+  tags: z.array(z.string()).default([]),
+  isPublic: z.boolean().default(true),
+  createdAt: z.iso.datetime(),
+})
+export type BlogPostAdmin = z.infer<typeof blogPostAdminSchema>
+
+export const blogPostInputSchema = z.object({
+  title: z.string().min(1, "El título es obligatorio"),
+  category: z.string().min(1, "La categoría es obligatoria"),
+  excerpt: z.string().min(1, "El resumen es obligatorio"),
+  bodyMarkdown: z.string().min(1, "El contenido es obligatorio"),
+  tags: z.array(z.string()),
+  isPublic: z.boolean(),
+  coverImage: z.string().optional(),
+  publishedAt: z.iso.datetime(),
+})
+export type BlogPostInput = z.infer<typeof blogPostInputSchema>
+
 // Opciones del formulario de contacto (selects del diseño). interest = tipo de
 // clase de interés; source = cómo nos conoció. Opcionales.
 export const contactInterestSchema = z.enum([
