@@ -1,4 +1,10 @@
-import { IconUser, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
+import {
+  IconUser,
+  IconEye,
+  IconPencil,
+  IconTrash,
+  IconCopy,
+} from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { Student } from "@/shared/schemas/students"
@@ -108,6 +114,18 @@ export const studentRowActions = (
     label: "Editar",
     icon: IconPencil,
     onSelect: (s) => router.push(`/d/students/${s.slug}/edit`),
+  },
+  {
+    label: "Copiar email",
+    icon: IconCopy,
+    onSelect: (s) => {
+      if (!s.email) {
+        toast.error("Este alumno no tiene correo")
+        return
+      }
+      navigator.clipboard.writeText(s.email)
+      toast.success("Correo copiado")
+    },
   },
   {
     // ponytail: eliminar es placeholder (fuera de alcance); avisa sin mutar.
