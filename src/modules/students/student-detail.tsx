@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { toast } from "sonner"
 import {
   IconPencil,
   IconArrowLeft,
   IconArrowUp,
   IconArrowDown,
+  IconCopy,
 } from "@tabler/icons-react"
 import type { Student } from "@/shared/schemas/students"
 import type { Measurement, AttendanceSession } from "@/shared/schemas/attendance"
@@ -311,7 +313,28 @@ export function StudentDetail({ slug }: { slug: string }) {
           </div>
 
           <dl className="mt-6 grid gap-6 sm:grid-cols-2">
-            <Field label="Correo de contacto" value={s.email ?? "—"} />
+            <div className="flex flex-col gap-1.5">
+              <dt className="disp text-[10px] text-muted-foreground">
+                Correo de contacto
+              </dt>
+              <dd className="flex items-center gap-2 text-sm">
+                {s.email ?? "—"}
+                {s.email ? (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-6"
+                    onClick={() => {
+                      navigator.clipboard.writeText(s.email!)
+                      toast.success("Correo copiado")
+                    }}
+                    aria-label="Copiar correo"
+                  >
+                    <IconCopy className="size-3.5" />
+                  </Button>
+                ) : null}
+              </dd>
+            </div>
             <Field label="Teléfono" value={s.phone ?? "—"} />
             <Field
               label="Fecha de nacimiento"
