@@ -109,7 +109,8 @@ La repetición constante, con atención al detalle, es lo que transforma el movi
     slug: "borrador-articulo-nutricion",
     title: "Nutrición para jóvenes karatekas (borrador)",
     category: "Salud",
-    excerpt: "Recomendaciones generales de nutrición para alumnos en crecimiento.",
+    excerpt:
+      "Recomendaciones generales de nutrición para alumnos en crecimiento.",
     bodyMarkdown: `## Nutrición y rendimiento
 
 Artículo en preparación sobre hábitos alimenticios recomendados para alumnos jóvenes que entrenan con regularidad.

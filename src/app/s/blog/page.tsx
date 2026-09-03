@@ -47,7 +47,7 @@ export default async function StudentBlogPage() {
                 {formatShortDate(post.publishedAt)}
               </span>
             </div>
-            <h2 className="font-semibold leading-snug">{post.title}</h2>
+            <h2 className="leading-snug font-semibold">{post.title}</h2>
             <p className="line-clamp-2 text-sm text-muted-foreground">
               {post.excerpt}
             </p>

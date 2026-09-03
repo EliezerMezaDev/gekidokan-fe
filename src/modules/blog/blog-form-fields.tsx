@@ -160,7 +160,9 @@ export function VisibilityField({ form }: Props) {
       render={({ field }) => (
         <label className="flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm">
           <Switch checked={field.value} onCheckedChange={field.onChange} />
-          {field.value ? "Público (visible en el portal)" : "Privado (borrador)"}
+          {field.value
+            ? "Público (visible en el portal)"
+            : "Privado (borrador)"}
         </label>
       )}
     />

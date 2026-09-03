@@ -23,11 +23,7 @@ import { useQueryFilters } from "@/shared/hooks/use-query-filters"
 import { blogColumns, blogRowActions } from "./columns"
 import { BlogFilter } from "./blog-filter"
 import { BlogCard } from "./blog-card"
-import {
-  applyBlogFilters,
-  blogFilterSchema,
-  blogQuerySchema,
-} from "./filters"
+import { applyBlogFilters, blogFilterSchema, blogQuerySchema } from "./filters"
 
 // Orquestador del módulo de blog. Responsabilidad única: cargar datos, exponer
 // los filtros (sincronizados con la URL vía query params) y el modo de vista
@@ -112,7 +108,10 @@ export function BlogView() {
 
   return (
     <div>
-      <ModuleHeader title="Blog" description="Gestiona las publicaciones del blog.">
+      <ModuleHeader
+        title="Blog"
+        description="Gestiona las publicaciones del blog."
+      >
         <Button asChild>
           <Link href="/d/blog/add">
             <IconPlus className="size-4" />

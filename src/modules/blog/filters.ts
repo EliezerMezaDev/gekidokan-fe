@@ -47,12 +47,8 @@ export function applyBlogFilters(
     if (filters.title && !matchesText(p.title, filters.title)) return false
     if (filters.category && !matchesText(p.category, filters.category))
       return false
-    if (filters.tag && !matchesText(p.tags.join(" "), filters.tag))
-      return false
-    if (
-      filters.isPublic &&
-      p.isPublic !== (filters.isPublic === "true")
-    )
+    if (filters.tag && !matchesText(p.tags.join(" "), filters.tag)) return false
+    if (filters.isPublic && p.isPublic !== (filters.isPublic === "true"))
       return false
     return true
   })

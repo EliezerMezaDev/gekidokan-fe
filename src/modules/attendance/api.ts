@@ -69,7 +69,10 @@ export async function saveClassAttendance(
       (s) => s.classId === classId && s.date === date
     )
     const session: AttendanceSession = {
-      id: existingIdx >= 0 ? attendanceSessions[existingIdx].id : `att-${classId}-${date}-${Date.now()}`,
+      id:
+        existingIdx >= 0
+          ? attendanceSessions[existingIdx].id
+          : `att-${classId}-${date}-${Date.now()}`,
       classId,
       date,
       records,
@@ -95,7 +98,9 @@ export async function getLatestAttendanceSession(): Promise<AttendanceSession | 
   if (USE_MOCKS) {
     await delay()
     if (attendanceSessions.length === 0) return null
-    return [...attendanceSessions].sort((a, b) => b.date.localeCompare(a.date))[0]
+    return [...attendanceSessions].sort((a, b) =>
+      b.date.localeCompare(a.date)
+    )[0]
   }
   // ponytail: endpoint real de "última sesión" pendiente de definir en backend
   const sessions = attendanceSessionSchema
@@ -116,7 +121,9 @@ export async function getMeasurements(
   return measurementSchema
     .array()
     .parse(
-      await api.get(studentId ? `/measurements?studentId=${studentId}` : "/measurements")
+      await api.get(
+        studentId ? `/measurements?studentId=${studentId}` : "/measurements"
+      )
     )
 }
 
@@ -137,5 +144,7 @@ export async function saveMeasurements(
     measurements.push(...created)
     return created
   }
-  return measurementSchema.array().parse(await api.post("/measurements", records))
+  return measurementSchema
+    .array()
+    .parse(await api.post("/measurements", records))
 }

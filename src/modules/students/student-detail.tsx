@@ -11,7 +11,10 @@ import {
   IconCopy,
 } from "@tabler/icons-react"
 import type { Student } from "@/shared/schemas/students"
-import type { Measurement, AttendanceSession } from "@/shared/schemas/attendance"
+import type {
+  Measurement,
+  AttendanceSession,
+} from "@/shared/schemas/attendance"
 import type { KarateClass } from "@/shared/schemas/classes"
 import { ModuleHeader } from "@/shared/components/module-header"
 import {
@@ -24,7 +27,10 @@ import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
 import { relationshipLabel } from "@/modules/guardians/relationship"
 import { calcAge } from "@/shared/lib/age"
-import { getMeasurements, getAttendanceByStudent } from "@/modules/attendance/api"
+import {
+  getMeasurements,
+  getAttendanceByStudent,
+} from "@/modules/attendance/api"
 import { getClasses } from "@/modules/classes/api"
 import { formatSchedule } from "@/modules/classes/class-labels"
 import { getStudentBySlug } from "./api"
@@ -123,9 +129,7 @@ function ClassesCard({ classes }: { classes: KarateClass[] }) {
     <Card className="flex flex-col gap-3 p-4 sm:p-6">
       <Eyebrow>Clases inscritas</Eyebrow>
       {classes.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
-          Sin clases inscritas.
-        </p>
+        <p className="text-sm text-muted-foreground">Sin clases inscritas.</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {classes.map((c) => (
@@ -362,7 +366,9 @@ export function StudentDetail({ slug }: { slug: string }) {
           weight={s.weight}
           measurements={measurements}
         />
-        <ClassesCard classes={classes.filter((c) => c.enrolledStudentIds.includes(s.id))} />
+        <ClassesCard
+          classes={classes.filter((c) => c.enrolledStudentIds.includes(s.id))}
+        />
 
         <AttendanceCard
           sessions={attendance}

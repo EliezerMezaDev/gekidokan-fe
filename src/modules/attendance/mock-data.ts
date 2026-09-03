@@ -1,4 +1,7 @@
-import type { AttendanceSession, Measurement } from "@/shared/schemas/attendance"
+import type {
+  AttendanceSession,
+  Measurement,
+} from "@/shared/schemas/attendance"
 import type { AttendanceRecord, DayOfWeek } from "@/shared/schemas/classes"
 import { mockClasses } from "@/modules/classes/mock-data"
 import { mockStudents } from "@/modules/students/mock-data"
@@ -27,7 +30,10 @@ function toISODate(d: Date): string {
 
 // Últimas `weeksBack` fechas (incluida la más reciente) que caen en el
 // día de la semana dado, contando hacia atrás desde TODAY.
-function recentDatesForWeekday(dayOfWeek: DayOfWeek, weeksBack: number): string[] {
+function recentDatesForWeekday(
+  dayOfWeek: DayOfWeek,
+  weeksBack: number
+): string[] {
   const target = DAY_INDEX[dayOfWeek]
   const diff = (TODAY.getUTCDay() - target + 7) % 7
   const mostRecent = new Date(TODAY)
@@ -48,26 +54,29 @@ export const mockAttendanceSessions: AttendanceSession[] = mockClasses
   .filter((c) => c.enrolledStudentIds.length > 0)
   .flatMap((c) =>
     c.schedules.flatMap((schedule) =>
-      recentDatesForWeekday(schedule.dayOfWeek, WEEKS_BACK).map((date, weekIdx) => {
-        const records: AttendanceRecord[] = c.enrolledStudentIds.map(
-          (studentId, studentIdx) => {
-            // Ausencia ocasional determinista: ~1 de cada 6 combinaciones.
-            const absent = (studentIdx + weekIdx) % 6 === 0
-            return {
-              studentId,
-              present: !absent,
-              notes: absent ? "Faltó (justificado)" : undefined,
+      recentDatesForWeekday(schedule.dayOfWeek, WEEKS_BACK).map(
+        (date, weekIdx) => {
+          const records: AttendanceRecord[] = c.enrolledStudentIds.map(
+            (studentId, studentIdx) => {
+              // Ausencia ocasional determinista: ~1 de cada 6 combinaciones.
+              const absent = (studentIdx + weekIdx) % 6 === 0
+              return {
+                studentId,
+                present: !absent,
+                notes: absent ? "Faltó (justificado)" : undefined,
+              }
             }
-          }
-        )
-        return {
-          id: `att-${c.id}-${schedule.dayOfWeek}-${date}`,
-          classId: c.id,
-          date,
-          records,
-          instructorNotes: weekIdx === 0 ? "Buena disposición del grupo" : undefined,
-        } satisfies AttendanceSession
-      })
+          )
+          return {
+            id: `att-${c.id}-${schedule.dayOfWeek}-${date}`,
+            classId: c.id,
+            date,
+            records,
+            instructorNotes:
+              weekIdx === 0 ? "Buena disposición del grupo" : undefined,
+          } satisfies AttendanceSession
+        }
+      )
     )
   )
 

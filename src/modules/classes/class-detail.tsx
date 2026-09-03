@@ -36,9 +36,7 @@ function Eyebrow({ children }: { children: string }) {
 export function ClassDetail({ slug }: { slug: string }) {
   const [karateClass, setKarateClass] = useState<KarateClass | null>(null)
   const [students, setStudents] = useState<Student[]>([])
-  const [lastSession, setLastSession] = useState<AttendanceSession | null>(
-    null
-  )
+  const [lastSession, setLastSession] = useState<AttendanceSession | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -99,8 +97,7 @@ export function ClassDetail({ slug }: { slug: string }) {
 
   const c = karateClass
   const nextSession = nextSessionDate(c.schedules)
-  const presentCount =
-    lastSession?.records.filter((r) => r.present).length ?? 0
+  const presentCount = lastSession?.records.filter((r) => r.present).length ?? 0
   const absentCount = (lastSession?.records.length ?? 0) - presentCount
 
   return (

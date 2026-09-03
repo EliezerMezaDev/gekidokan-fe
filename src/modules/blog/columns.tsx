@@ -1,4 +1,9 @@
-import { IconArticle, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
+import {
+  IconArticle,
+  IconEye,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { BlogPostAdmin } from "@/shared/schemas/public"
@@ -43,7 +48,9 @@ export const blogColumns: ColumnDef<BlogPostAdmin>[] = [
   {
     accessorKey: "category",
     header: "Categoría",
-    cell: ({ row }) => <Badge variant="secondary">{row.original.category}</Badge>,
+    cell: ({ row }) => (
+      <Badge variant="secondary">{row.original.category}</Badge>
+    ),
   },
   {
     id: "tags",

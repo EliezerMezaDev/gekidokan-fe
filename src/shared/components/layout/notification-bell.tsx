@@ -34,9 +34,11 @@ const relativeTimeFormatter = new Intl.RelativeTimeFormat("es", {
 function formatRelative(iso: string): string {
   const diffMs = new Date(iso).getTime() - Date.now()
   const diffMin = Math.round(diffMs / 60000)
-  if (Math.abs(diffMin) < 60) return relativeTimeFormatter.format(diffMin, "minute")
+  if (Math.abs(diffMin) < 60)
+    return relativeTimeFormatter.format(diffMin, "minute")
   const diffHour = Math.round(diffMin / 60)
-  if (Math.abs(diffHour) < 24) return relativeTimeFormatter.format(diffHour, "hour")
+  if (Math.abs(diffHour) < 24)
+    return relativeTimeFormatter.format(diffHour, "hour")
   const diffDay = Math.round(diffHour / 24)
   return relativeTimeFormatter.format(diffDay, "day")
 }
@@ -114,7 +116,7 @@ export function NotificationBell() {
             {items.map((n) => (
               <DropdownMenuItem
                 key={n.id}
-                className="flex flex-col items-start gap-0.5 whitespace-normal py-2"
+                className="flex flex-col items-start gap-0.5 py-2 whitespace-normal"
                 onClick={() => handleSelect(n)}
               >
                 <div className="flex w-full items-center gap-2">

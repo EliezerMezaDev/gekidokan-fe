@@ -9,9 +9,17 @@ import type { Student } from "@/shared/schemas/students"
 import { Card } from "@/shadcn/card"
 import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shadcn/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/shadcn/dialog"
 import { EmptyState, LoadingState } from "@/shared/components/states"
-import { invoiceStatusLabel, invoiceStatusBadgeClass } from "@/modules/billing/invoice-status"
+import {
+  invoiceStatusLabel,
+  invoiceStatusBadgeClass,
+} from "@/modules/billing/invoice-status"
 import { usdFmt, localFmt } from "@/modules/billing/money"
 import { ReportPaymentForm } from "./report-payment-form"
 
@@ -121,7 +129,9 @@ export default function PaymentsPage() {
           {invoice.status !== "PAID" && invoice.status !== "VOIDED" ? (
             <Dialog
               open={openInvoiceId === invoice.id}
-              onOpenChange={(open) => setOpenInvoiceId(open ? invoice.id : null)}
+              onOpenChange={(open) =>
+                setOpenInvoiceId(open ? invoice.id : null)
+              }
             >
               <Button
                 size="sm"

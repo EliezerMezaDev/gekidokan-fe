@@ -49,7 +49,10 @@ export function StudentsView() {
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useLocalStorageState<ViewMode>("view:students", "table")
+  const [view, setView] = useLocalStorageState<ViewMode>(
+    "view:students",
+    "table"
+  )
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 

@@ -70,9 +70,7 @@ export function ClassAttendanceView({ slug }: { slug: string }) {
           Object.fromEntries(s.records.map((r) => [r.studentId, r.present]))
         )
         setNotes(
-          Object.fromEntries(
-            s.records.map((r) => [r.studentId, r.notes ?? ""])
-          )
+          Object.fromEntries(s.records.map((r) => [r.studentId, r.notes ?? ""]))
         )
         setInstructorNotes(s.instructorNotes ?? "")
       } else {
@@ -107,7 +105,12 @@ export function ClassAttendanceView({ slug }: { slug: string }) {
         present: present[s.id] ?? false,
         notes: notes[s.id]?.trim() || undefined,
       }))
-      await saveClassAttendance(karateClass.id, date, records, instructorNotes.trim() || undefined)
+      await saveClassAttendance(
+        karateClass.id,
+        date,
+        records,
+        instructorNotes.trim() || undefined
+      )
       toast.success("Asistencia guardada.")
     } catch {
       toast.error("No se pudo guardar la asistencia. Intenta de nuevo.")
@@ -150,9 +153,7 @@ export function ClassAttendanceView({ slug }: { slug: string }) {
       <div className="grid grid-cols-1 gap-4">
         <Card className="p-4 sm:p-6">
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <p className="text-sm text-muted-foreground">
-              Fecha de la sesión.
-            </p>
+            <p className="text-sm text-muted-foreground">Fecha de la sesión.</p>
             <div className="flex flex-col gap-2">
               <Label htmlFor="attendance-date">Fecha</Label>
               <Input
@@ -210,7 +211,10 @@ export function ClassAttendanceView({ slug }: { slug: string }) {
           </div>
 
           <div className="mt-4 flex justify-end">
-            <Button onClick={handleSave} disabled={saving || enrolled.length === 0}>
+            <Button
+              onClick={handleSave}
+              disabled={saving || enrolled.length === 0}
+            >
               {saving ? "Guardando…" : "Guardar asistencia"}
             </Button>
           </div>

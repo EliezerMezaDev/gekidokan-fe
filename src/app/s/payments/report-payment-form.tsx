@@ -3,10 +3,7 @@
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import {
-  paymentInputSchema,
-  type PaymentInput,
-} from "@/shared/schemas/billing"
+import { paymentInputSchema, type PaymentInput } from "@/shared/schemas/billing"
 import { paymentMethodLabel } from "@/modules/billing/invoice-status"
 import { createPayment } from "@/modules/billing/api"
 import { Input } from "@/shadcn/input"
@@ -41,7 +38,12 @@ export function ReportPaymentForm({
     formState: { errors, isSubmitting },
   } = useForm<PaymentInput>({
     resolver: zodResolver(paymentInputSchema),
-    defaultValues: { method: "TRANSFER", reference: "", amount: 0, receiptUrl: "" },
+    defaultValues: {
+      method: "TRANSFER",
+      reference: "",
+      amount: 0,
+      receiptUrl: "",
+    },
   })
 
   async function onSubmit(values: PaymentInput) {
@@ -55,7 +57,11 @@ export function ReportPaymentForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-4"
+    >
       <div className="flex flex-col gap-2">
         <Label htmlFor="method">Método de pago</Label>
         <Controller
@@ -81,7 +87,11 @@ export function ReportPaymentForm({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="reference">Referencia</Label>
-        <Input id="reference" placeholder="Nº de operación, recibo…" {...register("reference")} />
+        <Input
+          id="reference"
+          placeholder="Nº de operación, recibo…"
+          {...register("reference")}
+        />
         <FieldError message={errors.reference?.message} />
       </div>
 
@@ -98,7 +108,11 @@ export function ReportPaymentForm({
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="receiptUrl">Comprobante (URL, opcional)</Label>
-        <Input id="receiptUrl" placeholder="https://…" {...register("receiptUrl")} />
+        <Input
+          id="receiptUrl"
+          placeholder="https://…"
+          {...register("receiptUrl")}
+        />
         <FieldError message={errors.receiptUrl?.message} />
       </div>
 

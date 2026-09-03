@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shadcn/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shadcn/table"
 import { Input } from "@/shadcn/input"
 import { Button } from "@/shadcn/button"
 import { Card } from "@/shadcn/card"
@@ -19,7 +26,9 @@ type Draft = { height: string; weight: string }
 
 export function MeasurementsBatchView() {
   const [students, setStudents] = useState<Student[]>([])
-  const [lastMeasurements, setLastMeasurements] = useState<Record<string, Measurement>>({})
+  const [lastMeasurements, setLastMeasurements] = useState<
+    Record<string, Measurement>
+  >({})
   const [drafts, setDrafts] = useState<Record<string, Draft>>({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -89,11 +98,15 @@ export function MeasurementsBatchView() {
         <TableBody>
           {students.map((s) => (
             <TableRow key={s.id}>
-              <TableCell>{s.firstName} {s.lastName}</TableCell>
+              <TableCell>
+                {s.firstName} {s.lastName}
+              </TableCell>
               <TableCell>
                 <Input
                   type="number"
-                  placeholder={lastMeasurements[s.id]?.height?.toString() ?? "—"}
+                  placeholder={
+                    lastMeasurements[s.id]?.height?.toString() ?? "—"
+                  }
                   value={drafts[s.id]?.height ?? ""}
                   onChange={(e) => setField(s.id, "height", e.target.value)}
                   className="w-24"
@@ -102,7 +115,9 @@ export function MeasurementsBatchView() {
               <TableCell>
                 <Input
                   type="number"
-                  placeholder={lastMeasurements[s.id]?.weight?.toString() ?? "—"}
+                  placeholder={
+                    lastMeasurements[s.id]?.weight?.toString() ?? "—"
+                  }
                   value={drafts[s.id]?.weight ?? ""}
                   onChange={(e) => setField(s.id, "weight", e.target.value)}
                   className="w-24"

@@ -1,9 +1,4 @@
-import {
-  IconKarate,
-  IconEye,
-  IconPencil,
-  IconTrash,
-} from "@tabler/icons-react"
+import { IconKarate, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
 import type { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import type { KarateClass } from "@/shared/schemas/classes"

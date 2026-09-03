@@ -100,7 +100,9 @@ export function BlogCard({
       ) : null}
 
       <div className="flex items-center justify-between border-t px-4 pt-3 text-xs text-muted-foreground">
-        <span className="truncate">{dateFmt.format(new Date(p.publishedAt))}</span>
+        <span className="truncate">
+          {dateFmt.format(new Date(p.publishedAt))}
+        </span>
       </div>
     </Card>
   )

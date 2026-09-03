@@ -69,11 +69,7 @@ export default function StudentContentPage() {
       {types.map((type) => {
         const list = reachable.filter((i) => i.type === type)
         return (
-          <TabsContent
-            key={type}
-            value={type}
-            className="flex flex-col gap-3"
-          >
+          <TabsContent key={type} value={type} className="flex flex-col gap-3">
             {list.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 Sin contenido disponible en esta categoría todavía.

@@ -54,8 +54,7 @@ const TOOLBAR: {
     icon: IconTable,
     label: "Tabla",
     action: {
-      before:
-        "| Columna 1 | Columna 2 |\n| --- | --- |\n| Valor 1 | Valor 2 |",
+      before: "| Columna 1 | Columna 2 |\n| --- | --- |\n| Valor 1 | Valor 2 |",
     },
   },
   { icon: IconMinus, label: "Línea horizontal", action: { before: "---" } },
@@ -143,7 +142,11 @@ export function MarkdownEditor({
 
       <div className="grid gap-3 md:grid-cols-2">
         <div className={cn(mobileTab !== "edit" && "hidden", "md:block")}>
-          <MarkdownTextarea textareaRef={ref} value={value} onChange={onChange} />
+          <MarkdownTextarea
+            textareaRef={ref}
+            value={value}
+            onChange={onChange}
+          />
         </div>
         <div className={cn(mobileTab !== "preview" && "hidden", "md:block")}>
           <MarkdownPreview value={value} />

@@ -38,7 +38,10 @@ export function ClassesView() {
   const [classes, setClasses] = useState<KarateClass[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [view, setView] = useLocalStorageState<ViewMode>("view:classes", "table")
+  const [view, setView] = useLocalStorageState<ViewMode>(
+    "view:classes",
+    "table"
+  )
   const [gridPageIndex, setGridPageIndex] = useState(0)
   const [gridPageSize, setGridPageSize] = useState(12)
 

@@ -8,9 +8,17 @@ import { getStudentBySlug } from "@/modules/students/api"
 import { dateFmt } from "@/modules/students/belt"
 import { getClasses } from "@/modules/classes/api"
 import { ModuleHeader } from "@/shared/components/module-header"
-import { DataTable, SortableHeader, type ColumnDef } from "@/shared/components/data-table"
+import {
+  DataTable,
+  SortableHeader,
+  type ColumnDef,
+} from "@/shared/components/data-table"
 import { TableFilters } from "@/shared/components/table-filters"
-import { EmptyState, ErrorState, LoadingState } from "@/shared/components/states"
+import {
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@/shared/components/states"
 import { Badge } from "@/shadcn/badge"
 import { Button } from "@/shadcn/button"
 import { useQueryFilters } from "@/shared/hooks/use-query-filters"
@@ -52,7 +60,10 @@ function matchesDate(date: string, term: string): boolean {
     .some((t) => date.includes(t))
 }
 
-function applyFilters(rows: AttendanceRow[], filters: ParsedFilter): AttendanceRow[] {
+function applyFilters(
+  rows: AttendanceRow[],
+  filters: ParsedFilter
+): AttendanceRow[] {
   if (!filters.date) return rows
   return rows.filter((r) => matchesDate(r.date, filters.date!))
 }
@@ -60,12 +71,16 @@ function applyFilters(rows: AttendanceRow[], filters: ParsedFilter): AttendanceR
 const columns: ColumnDef<AttendanceRow>[] = [
   {
     accessorKey: "date",
-    header: ({ column }) => <SortableHeader column={column}>Fecha</SortableHeader>,
+    header: ({ column }) => (
+      <SortableHeader column={column}>Fecha</SortableHeader>
+    ),
     cell: ({ row }) => dateFmt.format(new Date(row.original.date)),
   },
   {
     accessorKey: "className",
-    header: ({ column }) => <SortableHeader column={column}>Clase</SortableHeader>,
+    header: ({ column }) => (
+      <SortableHeader column={column}>Clase</SortableHeader>
+    ),
   },
   {
     accessorKey: "present",

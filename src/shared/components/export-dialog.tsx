@@ -22,7 +22,14 @@ import {
 } from "@/shadcn/dialog"
 import { Input } from "@/shadcn/input"
 import { Label } from "@/shadcn/label"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shadcn/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shadcn/table"
 import { csvCell } from "@/shared/lib/csv"
 
 // Diálogo de exportación "todos los items" (no solo la vista/página actual):
@@ -87,8 +94,8 @@ export function ExportDialog<T>({
         <DialogHeader>
           <DialogTitle>Exportar CSV</DialogTitle>
           <DialogDescription>
-            Exporta todos los registros (no solo los de la vista actual).
-            Filtrá antes de exportar si querés un subconjunto.
+            Exporta todos los registros (no solo los de la vista actual). Filtrá
+            antes de exportar si querés un subconjunto.
           </DialogDescription>
         </DialogHeader>
 
@@ -122,7 +129,10 @@ export function ExportDialog<T>({
                       <TableHead key={h.id}>
                         {h.isPlaceholder
                           ? null
-                          : flexRender(h.column.columnDef.header, h.getContext())}
+                          : flexRender(
+                              h.column.columnDef.header,
+                              h.getContext()
+                            )}
                       </TableHead>
                     ))}
                   </TableRow>
@@ -133,7 +143,10 @@ export function ExportDialog<T>({
                   <TableRow key={row.id}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>
